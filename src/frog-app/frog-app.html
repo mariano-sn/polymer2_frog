@@ -127,6 +127,40 @@
                 </select>
             </div>
         </div>
+        <div id="divModif">
+            <div>
+                <p>Estilo de línea</p>
+                <select id="selStyleLine" on-change="_setStyleLine">
+                    <template is="dom-repeat" items="[[styleLineList]]" as="line">
+                        <option value="[[line.id]]">[[line.name]]</option>
+                    </template>
+                </select>
+            </div>
+            <div>
+                <p>Grosor línea</p>
+                <select id="selGrLine" on-change="_setGrLine">
+                    <template is="dom-repeat" items="[[grLineList]]" as="grosor">
+                        <option value="[[grosor.id]]">[[grosor.name]]</option>
+                    </template>
+                </select>
+            </div>
+            <div>
+                <p>Velocidad de salto</p>
+                <select id="selSpeed" on-change="_setSpeed">
+                    <template is="dom-repeat" items="[[speedList]]" as="speed">
+                        <option value="[[speed.id]]">[[speed.name]]</option>
+                    </template>
+                </select>
+            </div>
+            <div>
+                <p>Rellena vacíos</p>
+                <select id="selEmpty" on-change="_setEmpty">
+                    <template is="dom-repeat" items="[[emptyList]]" as="vacio">
+                        <option value="[[vacio]]">[[vacio]]</option>
+                    </template>
+                </select>
+            </div>
+        </div>
         <frog-list 
         selection="[[selection]]" 
         casillas="[[casillas]]" 
@@ -136,6 +170,11 @@
         radius="[[radius]]"
         iconosize="[[iconosize]]" 
         iconopadding="[[iconopadding]]"
+        styleline="[[styleline]]"
+        grosorline="[[grosorline]]" 
+        speed="[[speed]]" 
+        empty="[[empty]]" 
+        emptyicono="[[emptyicono]]"
         >
         </frog-list>
     </template>
@@ -188,6 +227,15 @@
                         }
                     },
                     /**
+                     * Lista de vacio
+                     */ 
+                     emptyList:{
+                        type: Array,
+                        value: function(){
+                            return ['Si','No'];
+                        }
+                    },
+                    /**
                      * Lista de sombra
                      */ 
                      radiusList:{
@@ -198,6 +246,12 @@
                                     id: '10px',
                                     name:'Estandar'
                                 },{
+                                    id: '20px',
+                                    name:'Doble'
+                                },{
+                                    id: '30px',
+                                    name:'Triple'
+                                },{
                                     id: '10px 45px',
                                     name:'Izquiedo'
                                 },{
@@ -206,6 +260,75 @@
                                 },{
                                     id: '0px',
                                     name:'Ninguno'
+                                }
+                            ];
+                        }
+                    },
+                    /**
+                     * Lista de estilo de linea
+                     */ 
+                     styleLineList:{
+                        type: Array,
+                        value: function(){
+                            return [
+                                {
+                                    id: 'solid',
+                                    name:'Estandar'
+                                },{
+                                    id: 'dotted',
+                                    name:'Puntos'
+                                },{
+                                    id: 'dashed',
+                                    name:'Lineas'
+                                },{
+                                    id: 'ridge',
+                                    name:'Marco'
+                                }
+                            ];
+                        }
+                    },
+                    /**
+                     * Lista de velocidad de animación
+                     */ 
+                     speedList:{
+                        type: Array,
+                        value: function(){
+                            return [
+                                {
+                                    id: '500',
+                                    name:'Normal'
+                                },{
+                                    id: '1000',
+                                    name:'Lento'
+                                },{
+                                    id: '250',
+                                    name:'Rápido'
+                                },{
+                                    id: '150',
+                                    name:'Super Rápido'
+                                }
+                            ];
+                        }
+                    },
+                    /**
+                     * Lista de sombra
+                     */ 
+                     grLineList:{
+                        type: Array,
+                        value: function(){
+                            return [
+                                {
+                                    id: '1px',
+                                    name:'Estandar'
+                                },{
+                                    id: '2px',
+                                    name:'Doble'
+                                },{
+                                    id: '3px',
+                                    name:'Triple'
+                                },{
+                                    id: '4px',
+                                    name:'Cuadruple'
                                 }
                             ];
                         }
@@ -390,12 +513,48 @@
                      iconosize:{
                         type: String,
                         value: '--emoji-icon-width:90px;--emoji-icon-height:90px'
-                    },/**
+                    },
+                    /**
                      * Icono Magin
                      */ 
                      iconopadding:{
                         type: String,
                         value: '10px'
+                    },
+                    /**
+                     * Estilo de línea
+                     */ 
+                     styleline:{
+                        type: String,
+                        value: 'solid'
+                    },
+                    /**
+                     * Grosor de linea
+                     */ 
+                     grosorline:{
+                        type: String,
+                        value: '1px'
+                    },
+                    /**
+                     * Grosor de linea
+                     */ 
+                     speed:{
+                        type: String,
+                        value: '500'
+                    },
+                    /**
+                     * Espacios vacios
+                     */ 
+                     empty:{
+                        type: String,
+                        value: 'Si'
+                    },
+                    /**
+                     * Espacios vacios
+                     */ 
+                     emptyicono:{
+                        type: String,
+                        value: 'o'
                     },
                     /**
                      * Propiedad de nombre selección
@@ -625,6 +784,30 @@
              _setIcono(){
                 this.iconosize = this.$.selIcono.options[this.$.selIcono.selectedIndex].value;
                 this.iconopadding = this.get(['iconoList.'+this.$.selIcono.selectedIndex]+'.padding');
+            }
+            /**
+             * Obtiene el estilo de la línea que se requieren
+             */
+             _setStyleLine(){
+                this.styleline = this.$.selStyleLine.options[this.$.selStyleLine.selectedIndex].value;
+            }
+            /**
+             * Obtiene el estilo de la línea que se requieren
+             */
+             _setGrLine(){
+                this.grosorline = this.$.selGrLine.options[this.$.selGrLine.selectedIndex].value;
+            }
+            /**
+             * Obtiene el estilo de la línea que se requieren
+             */
+             _setSpeed(){
+                this.speed = this.$.selSpeed.options[this.$.selSpeed.selectedIndex].value;
+            }
+            /**
+             * Obtiene el estilo de la línea que se requieren
+             */
+             _setEmpty(){
+                this.empty = this.$.selEmpty.options[this.$.selEmpty.selectedIndex].value;
             }
             /**
              * Función para los crear los botones

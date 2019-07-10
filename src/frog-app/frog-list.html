@@ -246,6 +246,39 @@
              observer: '_setListFrog'
            },
            /**
+            * Posición de la rana
+            */
+            styleline:{
+             type: String,
+             observer: '_setListFrog'
+           },
+           /**
+            * Posición de la rana
+            */
+            grosorline:{
+             type: String,
+             observer: '_setListFrog'
+           },
+           /**
+            * Posición de la rana
+            */
+            speed:{
+             type: String
+           },
+           /**
+            * Posición de la rana
+            */
+            empty:{
+             type: String,
+             observer: '_setListFrog'
+           },
+           /**
+            * Posición de la rana
+            */
+            emptyicono:{
+             type: String
+           },
+           /**
             * Emoji de posición
             */
             emojiPosition:{
@@ -309,7 +342,7 @@
             this.set('arreglo.'+pos,true);
             this.position = pos;
             this._setNumPos(this.position);
-          },500*i);
+          },parseInt(this.speed)*i);
         }
      }
      /**
@@ -355,7 +388,7 @@
                 this.set('arreglo.'+pos,true);
                 this.position = pos;
                 this._setNumPos(this.position);
-            },500*i);
+            },parseInt(this.speed)*i);
         }
      }
      /**
@@ -401,7 +434,7 @@
             this.set('arreglo.'+pos,true);
             this.position = pos;
             this._setNumPos(this.position);
-          },500*i);
+          },parseInt(this.speed)*i);
         }
      }
      /**
@@ -425,7 +458,7 @@
             this.set('arreglo.'+pos,true);
             this.position = pos;
             this._setNumPos(this.position);
-          },500*i);
+          },parseInt(this.speed)*i);
         }
      }
      /**
@@ -489,7 +522,9 @@
        for(let i=0;i<this.arreglo.length;i++){
          let child = document.createElement("div");
          let p = document.createElement("p");
-         p.style.border = "1px solid "+this.bordercolor;
+         p.style.border = this.grosorline;
+         p.style.borderStyle = this.styleline;
+         p.style.borderColor = this.bordercolor;
          p.style.backgroundColor = this.fondocolor;
          if(this.shadow == 'Si'){
            p.style.boxShadow = "4px 4px 7px lightgrey";
@@ -514,7 +549,11 @@
        if(marca){
          return this.selection;
        }else{
-         return "";
+         if(this.empty == 'Si'){
+          return '';
+         }else{
+          return this.emptyicono;
+         }
        }
      }
       /**
