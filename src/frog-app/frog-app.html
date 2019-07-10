@@ -1,0 +1,681 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/noto-emoji-iconset/noto-emoji-iconset.html">
+<link rel="import" href="../../bower_components/noto-emoji-iconset/emoji-icon.html">
+<link rel="import" href="./frog-list.html">
+
+<dom-module id="frog-app">
+    <template>
+        <style>
+            :host{
+                background-color: black;
+            }
+            p{
+                color: white;
+            }
+            span{
+                color: white;
+            }
+            #divModif{
+                display: inline-block;
+                padding: 0em 1.5em;
+                width: 90%;
+                height: auto;
+            }
+            #divModif > div{
+                display: inline-block;
+                width: 150px;
+                text-align: center;
+            }
+            #divBtnOption{
+                display: inline-block;
+                padding: 0em 1.5em;
+                width: 90%;
+                height: auto;
+            }
+            #divBtnOption > div{
+                display:inline-block;
+                width: 80px;
+                height: 30px;
+                padding: 5px 5px;
+            }
+            #divBtnOption > div button{
+                display:inline-block;
+                width: 70px;
+                border-radius: 10px;
+            }
+            #divBtnOption > div button:hover{
+                background-color: lightseagreen;
+            }
+            .marcada{
+                background-color: black;
+            }
+            .desmarcada{
+                background-color: '';
+            }
+            div{
+                padding: 0em 1.5em;
+                width: 90%;
+                height: auto;
+            }
+            h1{
+                color: white;
+            }
+            h1 > emoji-icon{
+                --emoji-icon-width: 40px;
+                --emoji-icon-height: 40px;
+            }
+            select{
+                width: 100px;
+                height: 20px;
+                background-color: black;
+                color: white;
+            }
+        </style>
+        <div><h1><emoji-icon emoji="[[selection]]"></emoji-icon>  Saltos de [[name]]  <emoji-icon emoji="[[selection]]"></emoji-icon></h1></div>
+        <div><p>Selecciona la imagen que quieras:</p></div>
+        <div id="divBtnOption"></div>
+        <div>
+            <p>Selecciona los modificadores que deseas:</p>
+        </div>
+        <div id="divModif">
+            <div>
+                <p>Casillas</p>
+                <select id="selCas" on-change="_setNumCasilla">
+                    <template is="dom-repeat" items="[[numCasillas]]" as="casilla">
+                        <option value="[[casilla]]">[[casilla]]</option>
+                    </template>
+                </select>
+            </div>
+            <div>
+                <p>Color de borde</p>
+                <select id="selColorB" on-change="_setColorBorde">
+                    <template is="dom-repeat" items="[[colorBorde]]" as="color">
+                        <option value="[[color.id]]">[[color.name]]</option>
+                    </template>
+                </select>
+            </div>
+            <div>
+                <p>Color de fondo</p>
+                <select id="selColorF" on-change="_setBackgroundColor">
+                    <template is="dom-repeat" items="[[colorFondo]]" as="color">
+                        <option value="[[color.id]]">[[color.name]]</option>
+                    </template>
+                </select>
+            </div>
+            <div>
+                <p>Sombra</p>
+                <select id="selSombra" on-change="_setShadow">
+                    <template is="dom-repeat" items="[[shadowList]]" as="sombra">
+                        <option value="[[sombra]]">[[sombra]]</option>
+                    </template>
+                </select>
+            </div>
+            <div>
+                <p>Estilo Casilla</p>
+                <select id="selRadius" on-change="_setRadius">
+                    <template is="dom-repeat" items="[[radiusList]]" as="radio">
+                        <option value="[[radio.id]]">[[radio.name]]</option>
+                    </template>
+                </select>
+            </div>
+            <div>
+                <p>Tamaño Icono</p>
+                <select id="selIcono" on-change="_setIcono">
+                    <template is="dom-repeat" items="[[iconoList]]" as="icono">
+                        <option value="[[icono.size]]">[[icono.name]]</option>
+                    </template>
+                </select>
+            </div>
+        </div>
+        <frog-list 
+        selection="[[selection]]" 
+        casillas="[[casillas]]" 
+        bordercolor="[[bordercolor]]" 
+        fondocolor="[[fondocolor]]" 
+        shadow="[[shadow]]" 
+        radius="[[radius]]"
+        iconosize="[[iconosize]]" 
+        iconopadding="[[iconopadding]]"
+        >
+        </frog-list>
+    </template>
+    <script>
+        /**
+         * @customElement
+         * @polymer
+         */
+        class FrogApp extends Polymer.Element{
+            static get is(){
+                return 'frog-app';
+            }
+            /**
+              * Array of strings describing multi-property observer methods and their
+              * dependant properties
+              */
+            static get observers() {
+              return [
+                '_setButtons(opciones.*)'
+              ];
+            }
+            /**
+              * Object describing property-related metadata used by Polymer features
+              */
+            static get properties() {
+                return {
+                    /**
+                     * Propiedad de selección
+                     */ 
+                     selection:{
+                        type: String,
+                        value: 'frog'
+                    },
+                    /**
+                     * Número de casillas
+                     */ 
+                     numCasillas:{
+                        type: Array,
+                        value: function(){
+                            return [10,20,30,40,50];
+                        }
+                    },
+                    /**
+                     * Lista de sombra
+                     */ 
+                     shadowList:{
+                        type: Array,
+                        value: function(){
+                            return ['No','Si'];
+                        }
+                    },
+                    /**
+                     * Lista de sombra
+                     */ 
+                     radiusList:{
+                        type: Array,
+                        value: function(){
+                            return [
+                                {
+                                    id: '10px',
+                                    name:'Estandar'
+                                },{
+                                    id: '10px 45px',
+                                    name:'Izquiedo'
+                                },{
+                                    id: '45px 10px',
+                                    name:'Derecho'
+                                },{
+                                    id: '0px',
+                                    name:'Ninguno'
+                                }
+                            ];
+                        }
+                    },
+                    /**
+                     * Lista de sombra
+                     */ 
+                     iconoList:{
+                        type: Array,
+                        value: function(){
+                            return [
+                                {
+                                    size: '--emoji-icon-width:90px;--emoji-icon-height:90px',
+                                    padding: '10px',
+                                    name:'Extra Grande'
+                                },{
+                                    size: '--emoji-icon-width:70px;--emoji-icon-height:70px',
+                                    padding: '20px',
+                                    name:'Grande'
+                                },{
+                                    size: '--emoji-icon-width:50px;--emoji-icon-height:50px',
+                                    padding: '30px',
+                                    name:'Mediano'
+                                },{
+                                    size: '--emoji-icon-width:30px;--emoji-icon-height:30px',
+                                    padding: '40px',
+                                    name:'Chico'
+                                }
+                            ];
+                        }
+                    },
+                    /**
+                     * Número de casillas
+                     */ 
+                     colorBorde:{
+                        type: Array,
+                        value: function(){
+                            return [
+                                {
+                                    id: 'darkcyan',
+                                    name: 'Azul claro'
+                                },
+                                {
+                                    id: 'lightseagreen',
+                                    name: 'Verde agua'
+                                },
+                                {
+                                    id: 'lightcoral',
+                                    name: 'Coral'
+                                },
+                                {
+                                    id: 'lightsalmon',
+                                    name: 'Salmon'
+                                },
+                                {
+                                    id: 'lightslategray',
+                                    name: 'Gris'
+                                },
+                                {
+                                    id: 'white',
+                                    name: 'Blanco'
+                                },
+                                {
+                                    id: 'lightgreen',
+                                    name: 'Verde'
+                                },
+                                {
+                                    id: 'lightpink',
+                                    name: 'Rosa'
+                                },
+                                {
+                                    id: 'purple',
+                                    name: 'Morado'
+                                },
+                                {
+                                    id: 'red',
+                                    name: 'Rojo'
+                                },
+                                {
+                                    id: 'yellow',
+                                    name: 'Amarillo'
+                                }
+                            ];
+                        }
+                    },
+                    /**
+                     * Número de casillas
+                     */ 
+                     colorFondo:{
+                        type: Array,
+                        value: function(){
+                            return [
+                                {
+                                    id: 'black',
+                                    name: 'Negro'
+                                },
+                                {
+                                    id: 'darkcyan',
+                                    name: 'Azul claro'
+                                },
+                                {
+                                    id: 'lightseagreen',
+                                    name: 'Verde agua'
+                                },
+                                {
+                                    id: 'lightcoral',
+                                    name: 'Coral'
+                                },
+                                {
+                                    id: 'lightsalmon',
+                                    name: 'Salmon'
+                                },
+                                {
+                                    id: 'lightslategray',
+                                    name: 'Gris'
+                                },
+                                {
+                                    id: 'white',
+                                    name: 'Blanco'
+                                },
+                                {
+                                    id: 'lightgreen',
+                                    name: 'Verde'
+                                },
+                                {
+                                    id: 'lightpink',
+                                    name: 'Rosa'
+                                },
+                                {
+                                    id: 'purple',
+                                    name: 'Morado'
+                                },
+                                {
+                                    id: 'red',
+                                    name: 'Rojo'
+                                },
+                                {
+                                    id: 'yellow',
+                                    name: 'Amarillo'
+                                }
+                            ];
+                        }
+                    },
+                    /**
+                     * Número de casillas
+                     */ 
+                     casillas:{
+                        type: Number,
+                        value: 10
+                    },
+                    /**
+                     * Número de casillas
+                     */ 
+                     bordercolor:{
+                        type: String,
+                        value: 'darkcyan'
+                    },
+                    /**
+                     * Número de casillas
+                     */ 
+                     fondocolor:{
+                        type: String,
+                        value: 'black'
+                    },
+                    /**
+                     * Sombra
+                     */ 
+                     shadow:{
+                        type: Boolean,
+                        value: false
+                    },
+                    /**
+                     * Sombra
+                     */ 
+                     radius:{
+                        type: String,
+                        value: '10px'
+                    },
+                    /**
+                     * Icono Size
+                     */ 
+                     iconosize:{
+                        type: String,
+                        value: '--emoji-icon-width:90px;--emoji-icon-height:90px'
+                    },/**
+                     * Icono Magin
+                     */ 
+                     iconopadding:{
+                        type: String,
+                        value: '10px'
+                    },
+                    /**
+                     * Propiedad de nombre selección
+                     */
+                     name:{
+                        type: String,
+                        value: 'rana'
+                    },
+                    /**
+                     * Propiedad de selección
+                     */ 
+                     ant:{
+                        type: Number,
+                        value: 0
+                    },
+                    /**
+                     * Arreglo de opciones de frog
+                     * 
+                     */ 
+                    opciones:{
+                        type:Array,
+                        value:function(){return [{
+                            id: 'frog',
+                            value: 'rana',
+                            check: true
+                        },{
+                            id: 'alien',
+                            value: 'alien',
+                            check: false
+                        },{
+                            id: 'bear',
+                            value: 'oso',
+                            check: false
+                        },{
+                            id: 'cat',
+                            value: 'gato',
+                            check: false
+                        },{
+                            id: 'crab',
+                            value: 'cangrejo',
+                            check: false
+                        },{
+                            id: 'dog',
+                            value: 'perro',
+                            check: false
+                        },{
+                            id: 'dragon',
+                            value: 'dragon',
+                            check: false
+                        },{
+                            id: 'fox',
+                            value: 'zorro',
+                            check: false
+                        },{
+                            id: 'ghost',
+                            value: 'fantasma',
+                            check: false
+                        },{
+                            id: 'hamster',
+                            value: 'hamster',
+                            check: false
+                        },{
+                            id: 'monkey_face',
+                            value: 'mono',
+                            check: false
+                        },{
+                            id: 'panda_face',
+                            value: 'panda',
+                            check: false
+                        },{
+                            id: 'oncoming_automobile',
+                            value: 'carro',
+                            check: false
+                        },{
+                            id: 'oncoming_bus',
+                            value: 'bus',
+                            check: false
+                        },{
+                            id: 'helicopter',
+                            value: 'helicoptero',
+                            check: false
+                        },{
+                            id: 'airplane',
+                            value: 'avión',
+                            check: false
+                        },{
+                            id: 'rocket',
+                            value: 'cohete',
+                            check: false
+                        },{
+                            id: 'robot',
+                            value: 'robot',
+                            check: false
+                        },{
+                            id: 'skull',
+                            value: 'craneo',
+                            check: false
+                        },{
+                            id: 'soccer',
+                            value: 'futbol',
+                            check: false
+                        },{
+                            id: 'tractor',
+                            value: 'tractor',
+                            check: false
+                        },{
+                            id: 'angel',
+                            value: 'ángel',
+                            check: false
+                        },{
+                            id: 'clown',
+                            value: 'payaso',
+                            check: false
+                        },{
+                            id: 'fire',
+                            value: 'fuego',
+                            check: false
+                        },{
+                            id: 'bat',
+                            value: 'murcielago',
+                            check: false
+                        },{
+                            id: '8ball',
+                            value: 'bola 8',
+                            check: false
+                        },{
+                            id: 'round_pushpin',
+                            value: 'pin',
+                            check: false
+                        },{
+                            id: 'alarm_clock',
+                            value: 'alarma',
+                            check: false
+                        },{
+                            id: 'angry',
+                            value: 'furioso',
+                            check: false
+                        },{
+                            id: 'baby_tone2',
+                            value: 'baby',
+                            check: false
+                        },{
+                            id: 'beers',
+                            value: 'cerveza',
+                            check: false
+                        },{
+                            id: 'blush',
+                            value: 'sonrojado',
+                            check: false
+                        },{
+                            id: 'boy_tone2',
+                            value: 'boy',
+                            check: false
+                        },{
+                            id: 'butterfly',
+                            value: 'mariposa',
+                            check: false
+                        },{
+                            id: 'cloud_tornado',
+                            value: 'tornado',
+                            check: false
+                        },{
+                            id: 'joystick',
+                            value: 'joystick',
+                            check: false
+                        },{
+                            id: 'earth_americas',
+                            value: 'mundo',
+                            check: false
+                        },{
+                            id: 'game_die',
+                            value: 'dado',
+                            check: false
+                        },{
+                            id: 'grin',
+                            value: 'sonriente',
+                            check: false
+                        },{
+                            id: 'heart_eyes',
+                            value: 'enamorado',
+                            check: false
+                        },{
+                            id: 'icecream',
+                            value: 'helado',
+                            check: false
+                        },{
+                            id: 'jack_o_lantern',
+                            value: 'hallowen',
+                            check: false
+                        }];}
+                    }
+                };
+            }
+            /**
+             * Obtiene el número de casillas que se requieren
+             */
+            _setNumCasilla(){
+                this.casillas = parseInt(this.$.selCas.options[this.$.selCas.selectedIndex].value);
+            }
+            /**
+             * Obtiene el número de casillas que se requieren
+             */
+             _setColorBorde(){
+                this.bordercolor = this.$.selColorB.options[this.$.selColorB.selectedIndex].value;
+            }
+            /**
+             * Obtiene el número de casillas que se requieren
+             */
+             _setBackgroundColor(){
+                this.fondocolor = this.$.selColorF.options[this.$.selColorF.selectedIndex].value;
+            }
+            /**
+             * Obtiene el número de casillas que se requieren
+             */
+             _setShadow(){
+                this.shadow = this.$.selSombra.options[this.$.selSombra.selectedIndex].value;
+            }
+            /**
+             * Obtiene el número de casillas que se requieren
+             */
+             _setRadius(){
+                this.radius = this.$.selRadius.options[this.$.selRadius.selectedIndex].value;
+            }
+            /**
+             * Obtiene el número de casillas que se requieren
+             */
+             _setIcono(){
+                this.iconosize = this.$.selIcono.options[this.$.selIcono.selectedIndex].value;
+                this.iconopadding = this.get(['iconoList.'+this.$.selIcono.selectedIndex]+'.padding');
+            }
+            /**
+             * Función para los crear los botones
+             */
+            _setButtons(){
+                var padre = this.$.divBtnOption;
+                padre.innerHTML = "";
+                for(let i=0;i<this.opciones.length;i++){
+                    let div = document.createElement("div");
+                    let btn = document.createElement("button");
+                    btn.setAttribute('name','icono');
+                    btn.setAttribute('value',this.get(['opciones.'+i+'.id']));
+                    btn.setAttribute('class',this._setStyle(this.get(['opciones.'+i+'.check'])));
+                    btn.addEventListener('click',()=>{
+                        this.selection = this.get(['opciones.'+i+'.id']);
+                        this.name = this.get(['opciones.'+i+'.value']);
+                        this.set('opciones.'+this.ant+'.check',false);
+                        this.set('opciones.'+i+'.check',true);
+                        this.ant = i;
+                    });
+                    let emojiIcon = document.createElement("emoji-icon");
+                    emojiIcon.setAttribute("emoji",this.get(['opciones.'+i+'.id']));
+                    btn.appendChild(emojiIcon);
+                    div.appendChild(btn);
+                    padre.appendChild(div);
+                }
+            }
+            /**
+             * 
+             */
+            _setStyle(marca){
+              if(marca){
+                return "marcada";
+              }else{
+                return "desmarcada";
+              }
+            }
+            /**
+             * Constructor
+             */ 
+            constructor(){
+                super();
+            }
+            /**
+             * Use for one-time configuration of your component after local DOM is
+             * initialized.
+             */
+            ready() {
+                super.ready();
+            }
+        }
+        window.customElements.define(FrogApp.is,FrogApp);
+    </script>
+</dom-module>

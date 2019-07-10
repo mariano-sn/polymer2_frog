@@ -1,0 +1,529 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/noto-emoji-iconset/noto-emoji-iconset.html">
+<link rel="import" href="../../bower_components/noto-emoji-iconset/emoji-icon.html">
+
+<dom-module id="frog-list">
+  <template>
+    <style>
+      :host {
+        display: block;
+        background-color: black;
+      }
+      #btnJump{
+        display: inline-block;
+        padding: 0em 1.5em;
+        width: 90%;
+        height: auto;
+      }
+      #btnJump > div{
+        display: inline-block;
+        width: 100px;
+        margin: 0px 5px;
+        align-content: center;
+      }
+      #btnJump > div p emoji-icon{
+        --emoji-icon-width: 40px;
+        --emoji-icon-height: 40px;
+      }
+      #wayFrog{
+        padding: 1.5em 1.5em;
+        justify-content: center;
+        width: 90%;
+        height: auto;
+      }
+      #wayFrog > div{
+        padding: 0px 5px;
+        display: inline-block;
+        background-color: black;
+      }
+      #wayFrog > div p{
+        width: 110px;
+        height: 110px;
+        border: 1px solid darkcyan;
+        border-radius: 10px;
+        margin: 0px 0px;
+      }
+      #wayFrog > div p emoji-icon{
+        --emoji-icon-width: 80px;
+        --emoji-icon-height: 80px;
+      }
+      button{
+        border-radius: 10px;
+        width: 100px;
+        height: 40px;
+      }
+      button:hover{
+        background-color: lightseagreen;
+      }
+      div > p{
+        color: white;
+        text-align: center;
+        margin: 5px 0px;
+      }
+      #pMvs{
+        color: white;
+        padding: 0em 1.5em;
+        width: 90%;
+        height: auto;
+      }
+    </style>
+    <p id="pMvs">Movimientos</p>
+    <div id="btnJump">
+      <div>
+        <button on-click="_setJumpFirst">
+          <emoji-icon emoji="[[selection]]"></emoji-icon>   
+          <emoji-icon emoji=":track_previous:"></emoji-icon>
+        </button>
+        <p>Inicio</p>
+      </div>
+      <div>
+        <button on-click="_setJumpLeft">
+          <emoji-icon emoji="[[selection]]"></emoji-icon>   
+          <emoji-icon emoji=":rewind:"></emoji-icon>
+        </button>
+        <p>Atras</p>
+      </div>
+      <div>
+          <button on-click="_setJumpBack">
+            <emoji-icon emoji="[[selection]]"></emoji-icon>   
+            <emoji-icon emoji=":arrow_backward:"></emoji-icon>
+          </button>
+          <p>Anterior</p>
+        </div>
+      <div>
+        <button on-click="_setReset">
+          <emoji-icon emoji="[[selection]]"></emoji-icon>   
+          <emoji-icon emoji=":repeat:"></emoji-icon>
+        </button>
+        <p>Reset</p>
+      </div>
+      <div>
+        <button on-click="_setJumpNext">
+          <emoji-icon emoji="[[selection]]"></emoji-icon>   
+          <emoji-icon emoji=":arrow_forward:"></emoji-icon>
+        </button>
+        <p>Siguiente</p>
+      </div>
+      <div>
+        <button on-click="_setJumpRight">
+          <emoji-icon emoji="[[selection]]"></emoji-icon>   
+          <emoji-icon emoji=":fast_forward:"></emoji-icon>
+        </button>
+        <p>Adelante</p>
+      </div>
+      <div>
+        <button on-click="_setJumpLast">
+          <emoji-icon emoji="[[selection]]"></emoji-icon>   
+          <emoji-icon emoji=":track_next:"></emoji-icon>
+        </button>
+        <p>Fin</p>
+      </div>
+      <div>
+        <p>
+            <template is="dom-repeat" items="[[jumps]]" as="jump" mutable-data>
+                <emoji-icon emoji="[[jump]]"></emoji-icon>
+            </template>
+        </p>
+        <p>Saltos</p>
+      </div>
+      <div>
+        <p>
+          <template is="dom-repeat" items="[[emojiPosition]]" as="emojiPos" mutable-data>
+              <emoji-icon emoji="[[emojiPos]]"></emoji-icon>
+          </template>
+        <p>Posición</p>
+      </div>
+    </div>
+    <div id="wayFrog"></div>
+  </template>
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class FrogList extends Polymer.Element {
+      static get is() { return 'frog-list'; }
+      static get observers() {
+        return [
+          '_setListFrog(arreglo.*)'
+        ];
+      }
+      /**
+        * Array of strings describing multi-property observer methods and their
+        * dependant properties
+        */
+      static get properties() {
+        return {
+          /**
+          *Arreglo de casillas
+          */
+          arreglo:{
+            type: Array,
+            value: function (){
+              return [true,false,false,false,false,false,false,false,false,false];
+            }
+          },
+          /**
+           * Selección de imagen
+           */
+           selection:{
+             type: String,
+             value: '',
+             observer: '_setListFrog'
+           },
+          /**
+           * Saltos
+           */
+           jumps:{
+             type: Array,
+             value: function(){
+                 return ['zero','zero'];
+                }
+           },
+           /**
+           * Saltos
+           */
+           posJump:{
+             type: Array,
+             value: function(){
+               return ['zero','zero'];
+              }
+           },
+           /**
+            * Posición de la rana
+            */
+           position:{
+             type: Number,
+             value: 0
+           },
+           /**
+            * Posición de la rana
+            */
+            casillas:{
+             type: Number,
+             observer: '_setReset'
+           },
+           /**
+            * Posición de la rana
+            */
+            bordercolor:{
+             type: String,
+             observer: '_setListFrog'
+           },
+           /**
+            * Posición de la rana
+            */
+            fondocolor:{
+             type: String,
+             observer: '_setListFrog'
+           },
+           /**
+            * Posición de la rana
+            */
+            radius:{
+             type: String,
+             observer: '_setListFrog'
+           },
+           /**
+            * Posición de la rana
+            */
+            shadow:{
+             type: String,
+             observer: '_setListFrog'
+           },
+           /**
+            * Posición de la rana
+            */
+            iconosize:{
+             type: String,
+             observer: '_setListFrog'
+           },
+           /**
+            * Posición de la rana
+            */
+            iconopadding:{
+             type: String,
+             observer: '_setListFrog'
+           },
+           /**
+            * Emoji de posición
+            */
+            emojiPosition:{
+              type: Array,
+              value: function(){
+               return ['zero','zero'];
+              }
+           }
+        };
+      }
+      /**
+       * Función random
+       * 
+      */
+     _setReset(){
+       this.position = 0;
+       this._setNumJump(this.position);
+       this._setNumPos(this.position);
+       this._setNumCasillas();
+     }
+      /**
+       * Función random
+       * 
+      */
+     _getRandomNumber(){
+       var rand = Math.floor(Math.random()*(this.arreglo.length)+1);
+       return rand;
+     }
+     /**
+      * 
+      */
+      _setNumCasillas(){
+        var newArreglo = [];
+        for(let i=0;i<this.casillas;i++){
+          if(i==0){
+            newArreglo.push(true);
+          }else{
+            newArreglo.push(false);
+          }
+        }
+        this.set('arreglo',newArreglo);
+      } 
+     /**
+      * Función de salto a la derecha
+      */
+     _setJumpRight(){
+       let numJump = this._getRandomNumber();
+       this._setNumJump(numJump);
+       let pos = this.position;
+       let ant;
+       for(let i=0;i<numJump;i++){
+         setTimeout(()=>{
+           pos += 1;
+           if(pos == this.arreglo.length){
+             pos = 0;
+             ant = this.arreglo.length - 1;
+            }else{
+              ant = (pos-1);
+            }
+            this.set('arreglo.'+ant,false);
+            this.set('arreglo.'+pos,true);
+            this.position = pos;
+            this._setNumPos(this.position);
+          },500*i);
+        }
+     }
+     /**
+      * Función de salto a la derecha
+      */
+     _setJumpNext(){
+          let pos = this.position;
+          let numJump = 1;
+          this._setNumJump(numJump);
+          let ant;
+          setTimeout(()=>{
+              pos += 1;
+              if(pos == this.arreglo.length){
+                  pos = 0;
+                  ant = this.arreglo.length - 1;
+                }else{
+                    ant = (pos-1);
+                }
+                this.set('arreglo.'+ant,false);
+                this.set('arreglo.'+pos,true);
+                this.position = pos;
+                this._setNumPos(this.position);
+            },100);
+        }
+     /**
+      * Función de salto a la derecha
+      */
+      _setJumpLast(){
+        let pos = this.position;
+        let numJump = (this.arreglo.length - 1) - pos;
+        this._setNumJump(numJump);
+        let ant;
+        for(let i=0;i<numJump;i++){
+            setTimeout(()=>{
+            pos += 1;
+            if(pos == this.arreglo.length){
+                pos = 0;
+                ant = this.arreglo.length - 1;
+                }else{
+                ant = (pos-1);
+                }
+                this.set('arreglo.'+ant,false);
+                this.set('arreglo.'+pos,true);
+                this.position = pos;
+                this._setNumPos(this.position);
+            },500*i);
+        }
+     }
+     /**
+      * Función de salto a la derecha
+      */
+      _setJumpBack(){
+        let pos = this.position;
+        let numJump = 1;
+        this._setNumJump(numJump);
+        let ant;
+        setTimeout(()=>{
+            pos -= 1;
+           if(pos == -1){
+             pos = this.arreglo.length - 1;
+             ant = 0;
+            }else{
+              ant = (pos+1);
+            }
+            this.set('arreglo.'+ant,false);
+            this.set('arreglo.'+pos,true);
+            this.position = pos;
+            this._setNumPos(this.position);
+        },100);
+     }
+     /**
+      * Función de salto a la izquierda
+      */
+      _setJumpLeft(){
+       let numJump = this._getRandomNumber();
+       this._setNumJump(numJump);
+       let pos = this.position;
+       let ant;
+       for(let i=0;i<numJump;i++){
+         setTimeout(()=>{
+           pos -= 1;
+           if(pos == -1){
+             pos = this.arreglo.length - 1;
+             ant = 0;
+            }else{
+              ant = (pos+1);
+            }
+            this.set('arreglo.'+ant,false);
+            this.set('arreglo.'+pos,true);
+            this.position = pos;
+            this._setNumPos(this.position);
+          },500*i);
+        }
+     }
+     /**
+      * Función de salto al inicio
+      */
+      _setJumpFirst(){
+       let pos = this.position;
+       let numJump = pos;
+       this._setNumJump(numJump);
+       let ant;
+       for(let i=0;i<numJump;i++){
+         setTimeout(()=>{
+           pos -= 1;
+           if(pos == -1){
+             pos = this.arreglo.length - 1;
+             ant = 0;
+            }else{
+              ant = (pos+1);
+            }
+            this.set('arreglo.'+ant,false);
+            this.set('arreglo.'+pos,true);
+            this.position = pos;
+            this._setNumPos(this.position);
+          },500*i);
+        }
+     }
+     /**
+      * 
+      */
+     _getNumEmoji(num){
+         if(parseInt(num) == 0){
+             return 'zero';
+         }else if(parseInt(num) == 1){
+             return 'one';
+         }else if(parseInt(num) == 2){
+             return 'two';
+         }else if(parseInt(num) == 3){
+             return 'three';
+         }else if(parseInt(num) == 4){
+             return 'four';
+         }else if(parseInt(num) == 5){
+             return 'five';
+         }else if(parseInt(num) == 6){
+             return 'six';
+         }else if(parseInt(num) == 7){
+             return 'seven';
+         }else if(parseInt(num) == 8){
+             return 'eight';
+         }else if(parseInt(num) == 9){
+             return 'nine';
+         }
+     } 
+     /**
+      * Obtiene el emoji que se debe de obtener del número de saltos
+      */
+     _setNumJump(num){
+         var numS = num.toString();
+         if(num >= 10){
+            this.set('jumps.0',this._getNumEmoji(numS.charAt(0)));
+            this.set('jumps.1',this._getNumEmoji(numS.charAt(1)));
+         }else{
+            this.set('jumps.0',this._getNumEmoji('0'));
+            this.set('jumps.1',this._getNumEmoji(numS.charAt(0)));
+         }
+     }
+     /**
+      * Obtiene el emoji que se debe de obtener del número de posición
+      */
+      _setNumPos(num){
+        var numP = num.toString();
+        if(num >= 10){
+            this.set('emojiPosition.0',this._getNumEmoji(numP.charAt(0)));
+            this.set('emojiPosition.1',this._getNumEmoji(numP.charAt(1)));
+         }else{
+            this.set('emojiPosition.0',this._getNumEmoji('0'));
+            this.set('emojiPosition.1',this._getNumEmoji(numP.charAt(0)));
+         }
+       }
+      /**
+       * Función para los divs
+      */
+     _setListFrog(){
+       var padre = this.$.wayFrog;
+       padre.innerHTML = "";
+       for(let i=0;i<this.arreglo.length;i++){
+         let child = document.createElement("div");
+         let p = document.createElement("p");
+         p.style.border = "1px solid "+this.bordercolor;
+         p.style.backgroundColor = this.fondocolor;
+         if(this.shadow == 'Si'){
+           p.style.boxShadow = "4px 4px 7px lightgrey";
+         }else if(this.shadow == 'No'){
+          p.style.boxShadow = "";
+         }
+         p.style.borderRadius = this.radius;
+         let frog = document.createElement("emoji-icon");
+         frog.setAttribute("emoji",this._setFrog(this.get(['arreglo',i])));
+         frog.setAttribute("style",this.iconosize);
+         frog.style.padding = this.iconopadding;
+         p.appendChild(frog);
+         child.appendChild(p);
+         padre.appendChild(child);
+       }
+     }
+     /**
+      *Función que nos devuelve la clase a aplicar en el div
+      *dependiendo de un boolean 
+      */
+      _setFrog(marca){
+       if(marca){
+         return this.selection;
+       }else{
+         return "";
+       }
+     }
+      /**
+      *Constructor
+      */
+      constructor(){
+        super();
+      }
+    }
+    window.customElements.define(FrogList.is, FrogList);
+  </script>
+</dom-module>

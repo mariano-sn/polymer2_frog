@@ -1,0 +1,6 @@
+{
+  "name": "frog",
+  "short_name": "frog",
+  "start_url": "/",
+  "display": "standalone"
+}
