@@ -18,7 +18,7 @@
             #divModif{
                 display: inline-block;
                 padding: 0em 1.5em;
-                width: 90%;
+                width: 97%;
                 height: auto;
             }
             #divModif > div{
@@ -29,7 +29,7 @@
             #divBtnOption{
                 display: inline-block;
                 padding: 0em 1.5em;
-                width: 90%;
+                width: 97%;
                 height: auto;
             }
             #divBtnOption > div{
@@ -126,8 +126,6 @@
                     </template>
                 </select>
             </div>
-        </div>
-        <div id="divModif">
             <div>
                 <p>Estilo de línea</p>
                 <select id="selStyleLine" on-change="_setStyleLine">
@@ -156,7 +154,7 @@
                 <p>Rellena vacíos</p>
                 <select id="selEmpty" on-change="_setEmpty">
                     <template is="dom-repeat" items="[[emptyList]]" as="vacio">
-                        <option value="[[vacio]]">[[vacio]]</option>
+                        <option value="[[vacio.id]]">[[vacio.name]]</option>
                     </template>
                 </select>
             </div>
@@ -232,7 +230,16 @@
                      emptyList:{
                         type: Array,
                         value: function(){
-                            return ['Si','No'];
+                            return [
+                                {
+                                    id: false,
+                                    name: 'No'
+                                },
+                                {
+                                    id: true,
+                                    name: 'Si'
+                                }
+                            ];
                         }
                     },
                     /**
@@ -547,7 +554,7 @@
                      */ 
                      empty:{
                         type: String,
-                        value: 'Si'
+                        value: 'false'
                     },
                     /**
                      * Espacios vacios
