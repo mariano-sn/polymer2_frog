@@ -15,10 +15,13 @@
             span{
                 color: white;
             }
+            #divImgEmpty{
+                visibility: hidden;
+            }
             #divModif{
                 display: inline-block;
                 padding: 0em 1.5em;
-                width: 97%;
+                width: 1250px;
                 height: auto;
             }
             #divModif > div{
@@ -29,7 +32,7 @@
             #divBtnOption{
                 display: inline-block;
                 padding: 0em 1.5em;
-                width: 97%;
+                width: 1250px;
                 height: auto;
             }
             #divBtnOption > div{
@@ -44,6 +47,14 @@
                 border-radius: 10px;
             }
             #divBtnOption > div button:hover{
+                background-color: lightseagreen;
+            }
+            #btnResetMoves{
+                width: 100px;
+                height: 35px;
+                border-radius: 10px;
+            }
+            #btnResetMoves:hover{
                 background-color: lightseagreen;
             }
             .marcada{
@@ -158,6 +169,17 @@
                     </template>
                 </select>
             </div>
+            <div id="divImgEmpty">
+                <p>Imágen en vacios</p>
+                <select id="selEmptyIcon" on-change="_setEmptyIcon">
+                    <template is="dom-repeat" items="[[emptyIconList]]" as="vacioIcon">
+                        <option value="[[vacioIcon.id]]">[[vacioIcon.name]]</option>
+                    </template>
+                </select>
+            </div>
+            <div>
+                <button id="btnResetMoves" on-click="_resetMoves"><emoji-icon emoji="arrows_counterclockwise"></emoji-icon></button>>
+            </div>
         </div>
         <frog-list 
         selection="[[selection]]" 
@@ -172,7 +194,7 @@
         grosorline="[[grosorline]]" 
         speed="[[speed]]" 
         empty="[[empty]]" 
-        emptyicono="[[emptyicono]]"
+        emptyicon="[[emptyicon]]"
         >
         </frog-list>
     </template>
@@ -238,6 +260,24 @@
                                 {
                                     id: true,
                                     name: 'Si'
+                                }
+                            ];
+                        }
+                    },
+                    /**
+                     * Lista de iconos en vacios
+                     */ 
+                     emptyIconList:{
+                        type: Array,
+                        value: function(){
+                            return [
+                                {
+                                    id: 'o',
+                                    name: 'Circulo'
+                                },
+                                {
+                                    id: 'x',
+                                    name: 'Tache'
                                 }
                             ];
                         }
@@ -559,7 +599,7 @@
                     /**
                      * Espacios vacios
                      */ 
-                     emptyicono:{
+                     emptyicon:{
                         type: String,
                         value: 'o'
                     },
@@ -756,6 +796,31 @@
                 };
             }
             /**
+             * Reset de movimientos
+             */
+            _resetMoves(){
+                this.$.selCas.selectedIndex = 0;
+                this.$.selColorB.selectedIndex = 0;
+                this.$.selColorF.selectedIndex = 0;
+                this.$.selSombra.selectedIndex = 0;
+                this.$.selRadius.selectedIndex = 0;
+                this.$.selIcono.selectedIndex = 0;
+                this.$.selStyleLine.selectedIndex = 0;
+                this.$.selGrLine.selectedIndex = 0;
+                this.$.selSpeed.selectedIndex = 0;
+                this.$.selEmpty.selectedIndex = 0;
+                this._setNumCasilla();
+                this._setColorBorde();
+                this._setBackgroundColor();
+                this._setShadow();
+                this._setRadius();
+                this._setIcono();
+                this._setStyleLine();
+                this._setGrLine();
+                this._setSpeed();
+                this._setEmpty();
+            }
+            /**
              * Obtiene el número de casillas que se requieren
              */
             _setNumCasilla(){
@@ -812,9 +877,23 @@
             }
             /**
              * Obtiene el estilo de la línea que se requieren
-             */
+             */ 
              _setEmpty(){
                 this.empty = this.$.selEmpty.options[this.$.selEmpty.selectedIndex].value;
+                console.log(this.empty);
+                if(this.empty == 'true'){
+                    this.$.divImgEmpty.style.visibility = "visible";
+                }else{
+                    this.$.divImgEmpty.style.visibility = "hidden";
+                }
+                this.$.selEmptyIcon.selectedIndex = 0;
+                this._setEmptyIcon();
+            }
+            /**
+             * Obtiene el icono para los espacios vacios
+             */
+             _setEmptyIcon(){
+                 this.emptyicon = this.$.selEmptyIcon.options[this.$.selEmptyIcon.selectedIndex].value;
             }
             /**
              * Función para los crear los botones

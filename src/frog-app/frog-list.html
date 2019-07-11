@@ -12,7 +12,7 @@
       #btnJump{
         display: inline-block;
         padding: 0em 1.5em;
-        width: 90%;
+        width: 1250px;
         height: auto;
       }
       #btnJump > div{
@@ -28,11 +28,11 @@
       #wayFrog{
         padding: 1.5em 1.5em;
         justify-content: center;
-        width: 97%;
+        width: 1320px;
         height: auto;
       }
       #wayFrog > div{
-        padding: 0px 5px;
+        padding: 5px 5px;
         display: inline-block;
         background-color: black;
       }
@@ -275,8 +275,9 @@
            /**
             * Posición de la rana
             */
-            emptyicono:{
-             type: String
+            emptyicon:{
+             type: String,
+             observer: '_setListFrog'
            },
            /**
             * Emoji de posición
@@ -552,7 +553,7 @@
          if(this.empty == 'false'){
           return '';
          }else{
-          return this.emptyicono;
+          return this.emptyicon;
          }
        }
      }
