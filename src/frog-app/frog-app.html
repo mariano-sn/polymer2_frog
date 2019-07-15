@@ -4,678 +4,1130 @@
 <link rel="import" href="./frog-list.html">
 
 <dom-module id="frog-app">
-    <template>
-        <style>
-            :host{
-                background-color: black;
+  <template>
+    <style>
+      :host{
+        background-color: black;
+      }
+      /**
+      * Estilo aplicado a todas a las etiquetas p
+      */
+      p{
+        color: white;
+      }
+      /**
+      * Estilo aplicado a todas a las etiquetas span
+      */
+      span{
+        color: white;
+      }
+      /**
+      * Estilo aplicado a todas a las etiquetas con id = "divImgEmpty"
+      */
+      #divImgEmpty{
+        visibility: hidden;
+      }
+      /**
+      * Estilo aplicado a todas a las etiquetas con id = "divModif"
+      */
+      #divModif{
+        display: inline-block;
+        padding: 0em 1.5em;
+        width: 1250px;
+        height: auto;
+      }
+      /**
+      * Estilo aplicado a todas a las etiquetas div dentro de un id = "divModif"
+      */
+      #divModif > div{
+        display: inline-block;
+        width: 150px;
+        text-align: center;
+      }
+      /**
+      * Estilo aplicado a todas a las etiquetas con id = "divBtnOption"
+      */
+      #divBtnOption{
+        display: inline-block;
+        padding: 0em 1.5em;
+        width: 1250px;
+        height: auto;
+      }
+      /**
+      * Estilo aplicado a todas a las etiquetas div dentro de un id = "divBtnOption"
+      */
+      #divBtnOption > div{
+        display:inline-block;
+        width: 80px;
+        height: 30px;
+        padding: 5px 5px;
+      }
+      /**
+      * Estilo aplicado a todas a las etiquetas button dentro de un div dentro de un id = "divBtnOption"
+      */
+      #divBtnOption > div button{
+        display:inline-block;
+        width: 70px;
+        border-radius: 10px;
+      }
+      /**
+      * Estilo aplicado a todas a las etiquetas button dentro de un div dentro de un id = "divBtnOption" al ser seleccionado
+      */
+      #divBtnOption > div button:hover{
+        background-color: lightseagreen;
+      }
+      /**
+      * Estilo aplicado a todas a las etiquetas con id = "btnResetMoves"
+      */
+      #btnResetMoves{
+        width: 100px;
+        height: 35px;
+        border-radius: 10px;
+      }
+      /**
+      * Estilo aplicado a todas a las etiquetas con id = "btnResetMoves" al ser seleccionado
+      */
+      #btnResetMoves:hover{
+        background-color: lightseagreen;
+      }
+      /**
+      * Estilo para marcar la casilla de la rana
+      */
+      .marcada{
+        background-color: black;
+      }
+      /**
+      * Estilo para desmarcar la casilla de la rana
+      */
+      .desmarcada{
+        background-color: '';
+      }
+      /**
+      * Estilo aplicado a todas a las etiquetas div
+      */
+      div{
+        padding: 0em 1.5em;
+        width: 90%;
+        height: auto;
+      }
+      /**
+      * Estilo aplicado a todas a las etiquetas h1
+      */
+      h1{
+        color: white;
+      }
+      /**
+      * Estilo aplicado a todas a las etiquetas emoji-icon dentro de una etiqueta h1
+      */
+      h1 > emoji-icon{
+        --emoji-icon-width: 40px;
+        --emoji-icon-height: 40px;
+      }
+      /**
+      * Estilo aplicado a todas a las etiquetas select
+      */
+      select{
+        width: 100px;
+        height: 20px;
+        background-color: black;
+        color: white;
+      }
+    </style>
+    <!--Inicio de sección de titulos-->
+    <div>
+      <h1>
+        <emoji-icon emoji="[[selection]]"></emoji-icon>  Saltos de [[name]]  
+        <emoji-icon emoji="[[selection]]"></emoji-icon>
+      </h1>
+    </div>
+    <!--Fin de sección de titulos-->
+    <!--Inicio de sección de elección de iconos-->
+    <div><p>Selecciona la imagen que quieras:</p></div>
+    <div id="divBtnOption"></div>
+    <!--Fin de sección de elección de iconos-->
+    <!--Inicio de sección de elección de modificadores-->
+    <div>
+      <p>Selecciona los modificadores que deseas:</p>
+    </div>
+    <div id="divModif">
+      <div>
+        <p>Casillas</p>
+        <select id="selCas" on-change="_setNumCasilla">
+          <template is="dom-repeat" items="[[numCasillas]]" as="casilla">
+            <option value="[[casilla]]">[[casilla]]</option>
+          </template>
+        </select>
+      </div>
+      <div>
+        <p>Color de borde</p>
+        <select id="selColorB" on-change="_setColorBorde">
+          <template is="dom-repeat" items="[[colorBorde]]" as="color">
+            <option value="[[color.id]]">[[color.name]]</option>
+          </template>
+        </select>
+      </div>
+      <div>
+        <p>Color de fondo</p>
+        <select id="selColorF" on-change="_setBackgroundColor">
+          <template is="dom-repeat" items="[[colorFondo]]" as="color">
+            <option value="[[color.id]]">[[color.name]]</option>
+          </template>
+        </select>
+      </div>
+      <div>
+        <p>Sombra</p>
+        <select id="selSombra" on-change="_setShadow">
+          <template is="dom-repeat" items="[[shadowList]]" as="sombra">
+            <option value="[[sombra]]">[[sombra]]</option>
+          </template>
+        </select>
+      </div>
+      <div>
+        <p>Estilo Casilla</p>
+        <select id="selRadius" on-change="_setRadius">
+          <template is="dom-repeat" items="[[radiusList]]" as="radio">
+            <option value="[[radio.id]]">[[radio.name]]</option>
+          </template>
+        </select>
+      </div>
+      <div>
+        <p>Tamaño Icono</p>
+        <select id="selIcono" on-change="_setIconoSize">
+          <template is="dom-repeat" items="[[iconoList]]" as="icono">
+            <option value="[[icono.size]]">[[icono.name]]</option>
+          </template>
+        </select>
+      </div>
+      <div>
+        <p>Estilo de línea</p>
+        <select id="selStyleLine" on-change="_setStyleLine">
+          <template is="dom-repeat" items="[[styleLineList]]" as="line">
+            <option value="[[line.id]]">[[line.name]]</option>
+          </template>
+        </select>
+      </div>
+      <div>
+        <p>Grosor línea</p>
+        <select id="selGrLine" on-change="_setGrLine">
+          <template is="dom-repeat" items="[[grLineList]]" as="grosor">
+            <option value="[[grosor.id]]">[[grosor.name]]</option>
+          </template>
+        </select>
+      </div>
+      <div>
+        <p>Velocidad de salto</p>
+        <select id="selSpeed" on-change="_setSpeed">
+          <template is="dom-repeat" items="[[speedList]]" as="speed">
+            <option value="[[speed.id]]">[[speed.name]]</option>
+          </template>
+        </select>
+      </div>
+      <div>
+        <p>Rellena vacíos</p>
+        <select id="selEmpty" on-change="_setEmpty">
+          <template is="dom-repeat" items="[[emptyList]]" as="vacio">
+            <option value="[[vacio.id]]">[[vacio.name]]</option>
+          </template>
+        </select>
+      </div>
+      <div id="divImgEmpty">
+        <p>Imágen en vacios</p>
+        <select id="selEmptyIcon" on-change="_setEmptyIcon">
+          <template is="dom-repeat" items="[[emptyIconList]]" as="vacioIcon">
+            <option value="[[vacioIcon.id]]">[[vacioIcon.name]]</option>
+          </template>
+        </select>
+      </div>
+      <div>
+        <button id="btnResetMoves" on-click="_resetMoves">
+          <emoji-icon emoji="arrows_counterclockwise"></emoji-icon>
+        </button>>
+      </div>
+    </div>
+    <!--Fin de sección de elección de modificadores-->
+    <!--Inicio de sección de salto de frog invocando otro componente-->
+    <frog-list 
+    selection="[[selection]]" 
+    casillas="[[casillas]]" 
+    bordercolor="[[bordercolor]]" 
+    fondocolor="[[fondocolor]]" 
+    shadow="[[shadow]]" 
+    radius="[[radius]]"
+    iconosize="[[iconosize]]" 
+    iconopadding="[[iconopadding]]"
+    styleline="[[styleline]]"
+    grosorline="[[grosorline]]" 
+    speed="[[speed]]" 
+    empty="[[empty]]" 
+    emptyicon="[[emptyicon]]">
+    </frog-list>
+    <!--Fin de sección de salto de frog invocando otro componente-->
+  </template>
+  <script>
+    /**
+    * @customElement
+    * @polymer
+    */
+    class FrogApp extends Polymer.Element{
+      /**
+       * Get de función is
+       * @return {String} Nombre de dom-module id
+       */
+      static get is(){
+        return 'frog-app';
+      }
+      /**
+       * Función de observers para detectar modificaciones en un Array
+       * se utiliza el comodín * para detectar los cambios
+       */
+      static get observers() {
+        return [
+          '_setButtons(opciones.*)'
+        ];
+      }
+      /**
+       * Objeto properties que incluye las propiedades a utilizar
+       */
+      static get properties() {
+        return {
+          /**
+           * Propiedad de icono seleccionado
+           */ 
+          selection:{
+            type: String,
+            value: 'frog'
+          },
+          /**
+           * Número de casillas que se pueden seleccionar
+           */ 
+          numCasillas:{
+            type: Array,
+            value: function(){
+              return [10,15,20,25,30,35,40,45,50];
             }
-            p{
-                color: white;
+          },
+          /**
+           * Lista de si se podrá aplicar sombra a los cuadros
+           */ 
+          shadowList:{
+            type: Array,
+            value: function(){
+              return ['No','Si'];
             }
-            span{
-                color: white;
-            }
-            #divModif{
-                display: inline-block;
-                padding: 0em 1.5em;
-                width: 90%;
-                height: auto;
-            }
-            #divModif > div{
-                display: inline-block;
-                width: 150px;
-                text-align: center;
-            }
-            #divBtnOption{
-                display: inline-block;
-                padding: 0em 1.5em;
-                width: 90%;
-                height: auto;
-            }
-            #divBtnOption > div{
-                display:inline-block;
-                width: 80px;
-                height: 30px;
-                padding: 5px 5px;
-            }
-            #divBtnOption > div button{
-                display:inline-block;
-                width: 70px;
-                border-radius: 10px;
-            }
-            #divBtnOption > div button:hover{
-                background-color: lightseagreen;
-            }
-            .marcada{
-                background-color: black;
-            }
-            .desmarcada{
-                background-color: '';
-            }
-            div{
-                padding: 0em 1.5em;
-                width: 90%;
-                height: auto;
-            }
-            h1{
-                color: white;
-            }
-            h1 > emoji-icon{
-                --emoji-icon-width: 40px;
-                --emoji-icon-height: 40px;
-            }
-            select{
-                width: 100px;
-                height: 20px;
-                background-color: black;
-                color: white;
-            }
-        </style>
-        <div><h1><emoji-icon emoji="[[selection]]"></emoji-icon>  Saltos de [[name]]  <emoji-icon emoji="[[selection]]"></emoji-icon></h1></div>
-        <div><p>Selecciona la imagen que quieras:</p></div>
-        <div id="divBtnOption"></div>
-        <div>
-            <p>Selecciona los modificadores que deseas:</p>
-        </div>
-        <div id="divModif">
-            <div>
-                <p>Casillas</p>
-                <select id="selCas" on-change="_setNumCasilla">
-                    <template is="dom-repeat" items="[[numCasillas]]" as="casilla">
-                        <option value="[[casilla]]">[[casilla]]</option>
-                    </template>
-                </select>
-            </div>
-            <div>
-                <p>Color de borde</p>
-                <select id="selColorB" on-change="_setColorBorde">
-                    <template is="dom-repeat" items="[[colorBorde]]" as="color">
-                        <option value="[[color.id]]">[[color.name]]</option>
-                    </template>
-                </select>
-            </div>
-            <div>
-                <p>Color de fondo</p>
-                <select id="selColorF" on-change="_setBackgroundColor">
-                    <template is="dom-repeat" items="[[colorFondo]]" as="color">
-                        <option value="[[color.id]]">[[color.name]]</option>
-                    </template>
-                </select>
-            </div>
-            <div>
-                <p>Sombra</p>
-                <select id="selSombra" on-change="_setShadow">
-                    <template is="dom-repeat" items="[[shadowList]]" as="sombra">
-                        <option value="[[sombra]]">[[sombra]]</option>
-                    </template>
-                </select>
-            </div>
-            <div>
-                <p>Estilo Casilla</p>
-                <select id="selRadius" on-change="_setRadius">
-                    <template is="dom-repeat" items="[[radiusList]]" as="radio">
-                        <option value="[[radio.id]]">[[radio.name]]</option>
-                    </template>
-                </select>
-            </div>
-            <div>
-                <p>Tamaño Icono</p>
-                <select id="selIcono" on-change="_setIcono">
-                    <template is="dom-repeat" items="[[iconoList]]" as="icono">
-                        <option value="[[icono.size]]">[[icono.name]]</option>
-                    </template>
-                </select>
-            </div>
-        </div>
-        <frog-list 
-        selection="[[selection]]" 
-        casillas="[[casillas]]" 
-        bordercolor="[[bordercolor]]" 
-        fondocolor="[[fondocolor]]" 
-        shadow="[[shadow]]" 
-        radius="[[radius]]"
-        iconosize="[[iconosize]]" 
-        iconopadding="[[iconopadding]]"
-        >
-        </frog-list>
-    </template>
-    <script>
-        /**
-         * @customElement
-         * @polymer
-         */
-        class FrogApp extends Polymer.Element{
-            static get is(){
-                return 'frog-app';
-            }
-            /**
-              * Array of strings describing multi-property observer methods and their
-              * dependant properties
-              */
-            static get observers() {
+          },
+          /**
+           * Lista para ver si los espacios en blanco se dejan vacios o con un icono
+           */ 
+          emptyList:{
+            type: Array,
+            value: function(){
               return [
-                '_setButtons(opciones.*)'
+                {
+                  id: false,
+                  name: 'No'
+                },
+                {
+                  id: true,
+                  name: 'Si'
+                }
               ];
             }
-            /**
-              * Object describing property-related metadata used by Polymer features
-              */
-            static get properties() {
-                return {
-                    /**
-                     * Propiedad de selección
-                     */ 
-                     selection:{
-                        type: String,
-                        value: 'frog'
-                    },
-                    /**
-                     * Número de casillas
-                     */ 
-                     numCasillas:{
-                        type: Array,
-                        value: function(){
-                            return [10,20,30,40,50];
-                        }
-                    },
-                    /**
-                     * Lista de sombra
-                     */ 
-                     shadowList:{
-                        type: Array,
-                        value: function(){
-                            return ['No','Si'];
-                        }
-                    },
-                    /**
-                     * Lista de sombra
-                     */ 
-                     radiusList:{
-                        type: Array,
-                        value: function(){
-                            return [
-                                {
-                                    id: '10px',
-                                    name:'Estandar'
-                                },{
-                                    id: '10px 45px',
-                                    name:'Izquiedo'
-                                },{
-                                    id: '45px 10px',
-                                    name:'Derecho'
-                                },{
-                                    id: '0px',
-                                    name:'Ninguno'
-                                }
-                            ];
-                        }
-                    },
-                    /**
-                     * Lista de sombra
-                     */ 
-                     iconoList:{
-                        type: Array,
-                        value: function(){
-                            return [
-                                {
-                                    size: '--emoji-icon-width:90px;--emoji-icon-height:90px',
-                                    padding: '10px',
-                                    name:'Extra Grande'
-                                },{
-                                    size: '--emoji-icon-width:70px;--emoji-icon-height:70px',
-                                    padding: '20px',
-                                    name:'Grande'
-                                },{
-                                    size: '--emoji-icon-width:50px;--emoji-icon-height:50px',
-                                    padding: '30px',
-                                    name:'Mediano'
-                                },{
-                                    size: '--emoji-icon-width:30px;--emoji-icon-height:30px',
-                                    padding: '40px',
-                                    name:'Chico'
-                                }
-                            ];
-                        }
-                    },
-                    /**
-                     * Número de casillas
-                     */ 
-                     colorBorde:{
-                        type: Array,
-                        value: function(){
-                            return [
-                                {
-                                    id: 'darkcyan',
-                                    name: 'Azul claro'
-                                },
-                                {
-                                    id: 'lightseagreen',
-                                    name: 'Verde agua'
-                                },
-                                {
-                                    id: 'lightcoral',
-                                    name: 'Coral'
-                                },
-                                {
-                                    id: 'lightsalmon',
-                                    name: 'Salmon'
-                                },
-                                {
-                                    id: 'lightslategray',
-                                    name: 'Gris'
-                                },
-                                {
-                                    id: 'white',
-                                    name: 'Blanco'
-                                },
-                                {
-                                    id: 'lightgreen',
-                                    name: 'Verde'
-                                },
-                                {
-                                    id: 'lightpink',
-                                    name: 'Rosa'
-                                },
-                                {
-                                    id: 'purple',
-                                    name: 'Morado'
-                                },
-                                {
-                                    id: 'red',
-                                    name: 'Rojo'
-                                },
-                                {
-                                    id: 'yellow',
-                                    name: 'Amarillo'
-                                }
-                            ];
-                        }
-                    },
-                    /**
-                     * Número de casillas
-                     */ 
-                     colorFondo:{
-                        type: Array,
-                        value: function(){
-                            return [
-                                {
-                                    id: 'black',
-                                    name: 'Negro'
-                                },
-                                {
-                                    id: 'darkcyan',
-                                    name: 'Azul claro'
-                                },
-                                {
-                                    id: 'lightseagreen',
-                                    name: 'Verde agua'
-                                },
-                                {
-                                    id: 'lightcoral',
-                                    name: 'Coral'
-                                },
-                                {
-                                    id: 'lightsalmon',
-                                    name: 'Salmon'
-                                },
-                                {
-                                    id: 'lightslategray',
-                                    name: 'Gris'
-                                },
-                                {
-                                    id: 'white',
-                                    name: 'Blanco'
-                                },
-                                {
-                                    id: 'lightgreen',
-                                    name: 'Verde'
-                                },
-                                {
-                                    id: 'lightpink',
-                                    name: 'Rosa'
-                                },
-                                {
-                                    id: 'purple',
-                                    name: 'Morado'
-                                },
-                                {
-                                    id: 'red',
-                                    name: 'Rojo'
-                                },
-                                {
-                                    id: 'yellow',
-                                    name: 'Amarillo'
-                                }
-                            ];
-                        }
-                    },
-                    /**
-                     * Número de casillas
-                     */ 
-                     casillas:{
-                        type: Number,
-                        value: 10
-                    },
-                    /**
-                     * Número de casillas
-                     */ 
-                     bordercolor:{
-                        type: String,
-                        value: 'darkcyan'
-                    },
-                    /**
-                     * Número de casillas
-                     */ 
-                     fondocolor:{
-                        type: String,
-                        value: 'black'
-                    },
-                    /**
-                     * Sombra
-                     */ 
-                     shadow:{
-                        type: Boolean,
-                        value: false
-                    },
-                    /**
-                     * Sombra
-                     */ 
-                     radius:{
-                        type: String,
-                        value: '10px'
-                    },
-                    /**
-                     * Icono Size
-                     */ 
-                     iconosize:{
-                        type: String,
-                        value: '--emoji-icon-width:90px;--emoji-icon-height:90px'
-                    },/**
-                     * Icono Magin
-                     */ 
-                     iconopadding:{
-                        type: String,
-                        value: '10px'
-                    },
-                    /**
-                     * Propiedad de nombre selección
-                     */
-                     name:{
-                        type: String,
-                        value: 'rana'
-                    },
-                    /**
-                     * Propiedad de selección
-                     */ 
-                     ant:{
-                        type: Number,
-                        value: 0
-                    },
-                    /**
-                     * Arreglo de opciones de frog
-                     * 
-                     */ 
-                    opciones:{
-                        type:Array,
-                        value:function(){return [{
-                            id: 'frog',
-                            value: 'rana',
-                            check: true
-                        },{
-                            id: 'alien',
-                            value: 'alien',
-                            check: false
-                        },{
-                            id: 'bear',
-                            value: 'oso',
-                            check: false
-                        },{
-                            id: 'cat',
-                            value: 'gato',
-                            check: false
-                        },{
-                            id: 'crab',
-                            value: 'cangrejo',
-                            check: false
-                        },{
-                            id: 'dog',
-                            value: 'perro',
-                            check: false
-                        },{
-                            id: 'dragon',
-                            value: 'dragon',
-                            check: false
-                        },{
-                            id: 'fox',
-                            value: 'zorro',
-                            check: false
-                        },{
-                            id: 'ghost',
-                            value: 'fantasma',
-                            check: false
-                        },{
-                            id: 'hamster',
-                            value: 'hamster',
-                            check: false
-                        },{
-                            id: 'monkey_face',
-                            value: 'mono',
-                            check: false
-                        },{
-                            id: 'panda_face',
-                            value: 'panda',
-                            check: false
-                        },{
-                            id: 'oncoming_automobile',
-                            value: 'carro',
-                            check: false
-                        },{
-                            id: 'oncoming_bus',
-                            value: 'bus',
-                            check: false
-                        },{
-                            id: 'helicopter',
-                            value: 'helicoptero',
-                            check: false
-                        },{
-                            id: 'airplane',
-                            value: 'avión',
-                            check: false
-                        },{
-                            id: 'rocket',
-                            value: 'cohete',
-                            check: false
-                        },{
-                            id: 'robot',
-                            value: 'robot',
-                            check: false
-                        },{
-                            id: 'skull',
-                            value: 'craneo',
-                            check: false
-                        },{
-                            id: 'soccer',
-                            value: 'futbol',
-                            check: false
-                        },{
-                            id: 'tractor',
-                            value: 'tractor',
-                            check: false
-                        },{
-                            id: 'angel',
-                            value: 'ángel',
-                            check: false
-                        },{
-                            id: 'clown',
-                            value: 'payaso',
-                            check: false
-                        },{
-                            id: 'fire',
-                            value: 'fuego',
-                            check: false
-                        },{
-                            id: 'bat',
-                            value: 'murcielago',
-                            check: false
-                        },{
-                            id: '8ball',
-                            value: 'bola 8',
-                            check: false
-                        },{
-                            id: 'round_pushpin',
-                            value: 'pin',
-                            check: false
-                        },{
-                            id: 'alarm_clock',
-                            value: 'alarma',
-                            check: false
-                        },{
-                            id: 'angry',
-                            value: 'furioso',
-                            check: false
-                        },{
-                            id: 'baby_tone2',
-                            value: 'baby',
-                            check: false
-                        },{
-                            id: 'beers',
-                            value: 'cerveza',
-                            check: false
-                        },{
-                            id: 'blush',
-                            value: 'sonrojado',
-                            check: false
-                        },{
-                            id: 'boy_tone2',
-                            value: 'boy',
-                            check: false
-                        },{
-                            id: 'butterfly',
-                            value: 'mariposa',
-                            check: false
-                        },{
-                            id: 'cloud_tornado',
-                            value: 'tornado',
-                            check: false
-                        },{
-                            id: 'joystick',
-                            value: 'joystick',
-                            check: false
-                        },{
-                            id: 'earth_americas',
-                            value: 'mundo',
-                            check: false
-                        },{
-                            id: 'game_die',
-                            value: 'dado',
-                            check: false
-                        },{
-                            id: 'grin',
-                            value: 'sonriente',
-                            check: false
-                        },{
-                            id: 'heart_eyes',
-                            value: 'enamorado',
-                            check: false
-                        },{
-                            id: 'icecream',
-                            value: 'helado',
-                            check: false
-                        },{
-                            id: 'jack_o_lantern',
-                            value: 'hallowen',
-                            check: false
-                        }];}
-                    }
-                };
-            }
-            /**
-             * Obtiene el número de casillas que se requieren
-             */
-            _setNumCasilla(){
-                this.casillas = parseInt(this.$.selCas.options[this.$.selCas.selectedIndex].value);
-            }
-            /**
-             * Obtiene el número de casillas que se requieren
-             */
-             _setColorBorde(){
-                this.bordercolor = this.$.selColorB.options[this.$.selColorB.selectedIndex].value;
-            }
-            /**
-             * Obtiene el número de casillas que se requieren
-             */
-             _setBackgroundColor(){
-                this.fondocolor = this.$.selColorF.options[this.$.selColorF.selectedIndex].value;
-            }
-            /**
-             * Obtiene el número de casillas que se requieren
-             */
-             _setShadow(){
-                this.shadow = this.$.selSombra.options[this.$.selSombra.selectedIndex].value;
-            }
-            /**
-             * Obtiene el número de casillas que se requieren
-             */
-             _setRadius(){
-                this.radius = this.$.selRadius.options[this.$.selRadius.selectedIndex].value;
-            }
-            /**
-             * Obtiene el número de casillas que se requieren
-             */
-             _setIcono(){
-                this.iconosize = this.$.selIcono.options[this.$.selIcono.selectedIndex].value;
-                this.iconopadding = this.get(['iconoList.'+this.$.selIcono.selectedIndex]+'.padding');
-            }
-            /**
-             * Función para los crear los botones
-             */
-            _setButtons(){
-                var padre = this.$.divBtnOption;
-                padre.innerHTML = "";
-                for(let i=0;i<this.opciones.length;i++){
-                    let div = document.createElement("div");
-                    let btn = document.createElement("button");
-                    btn.setAttribute('name','icono');
-                    btn.setAttribute('value',this.get(['opciones.'+i+'.id']));
-                    btn.setAttribute('class',this._setStyle(this.get(['opciones.'+i+'.check'])));
-                    btn.addEventListener('click',()=>{
-                        this.selection = this.get(['opciones.'+i+'.id']);
-                        this.name = this.get(['opciones.'+i+'.value']);
-                        this.set('opciones.'+this.ant+'.check',false);
-                        this.set('opciones.'+i+'.check',true);
-                        this.ant = i;
-                    });
-                    let emojiIcon = document.createElement("emoji-icon");
-                    emojiIcon.setAttribute("emoji",this.get(['opciones.'+i+'.id']));
-                    btn.appendChild(emojiIcon);
-                    div.appendChild(btn);
-                    padre.appendChild(div);
+          },
+          /**
+           * Lista de iconos para rellenar los espacios vacios
+           */ 
+          emptyIconList:{
+            type: Array,
+            value: function(){
+              return [
+                {
+                  id: 'o',
+                  name: 'Circulo'
+                },
+                {
+                  id: 'x',
+                  name: 'Tache'
+                },
+                {
+                  id: 'no_entry_sign',
+                  name: 'Denegado'
+                },
+                {
+                  id: 'no_entry',
+                  name: 'Menos'
+                },
+                {
+                  id: 'anger',
+                  name: 'Furioso'
+                },
+                {
+                  id: 'construction',
+                  name: 'Construcción'
                 }
+              ];
             }
-            /**
-             * 
-             */
-            _setStyle(marca){
-              if(marca){
-                return "marcada";
-              }else{
-                return "desmarcada";
-              }
+          },
+          /**
+           * Lista del radio que se le puede aplicar al borde las casillas
+           */ 
+          radiusList:{
+            type: Array,
+            value: function(){
+              return [
+                {
+                  id: '10px',
+                  name:'Estandar'
+                },{
+                  id: '20px',
+                  name:'Doble'
+                },{
+                  id: '30px',
+                  name:'Triple'
+                },{
+                  id: '10px 45px',
+                  name:'Izquiedo'
+                },{
+                  id: '45px 10px',
+                  name:'Derecho'
+                },{
+                  id: '0px',
+                  name:'Ninguno'
+                }
+              ];
             }
-            /**
-             * Constructor
-             */ 
-            constructor(){
-                super();
+          },
+          /**
+           * Lista de estilo de linea que s ele puede aplicar a las casillas
+           */ 
+          styleLineList:{
+            type: Array,
+            value: function(){
+              return [
+                {
+                  id: 'solid',
+                  name:'Estandar'
+                },{
+                  id: 'dotted',
+                  name:'Puntos'
+                },{
+                  id: 'dashed',
+                  name:'Lineas'
+                },{
+                  id: 'ridge',
+                  name:'Marco'
+                }
+              ];
             }
-            /**
-             * Use for one-time configuration of your component after local DOM is
-             * initialized.
-             */
-            ready() {
-                super.ready();
+          },
+          /**
+           * Lista de velocidad de animación de salto
+           */ 
+          speedList:{
+            type: Array,
+            value: function(){
+              return [
+                {
+                  id: '500',
+                  name:'Normal'
+                },{
+                  id: '1000',
+                  name:'Lento'
+                },{
+                  id: '250',
+                  name:'Rápido'
+                },{
+                  id: '150',
+                  name:'Super Rápido'
+                }
+              ];
             }
+          },
+          /**
+           * Lista del grosor de línea que se aplica a las casillas
+           */ 
+          grLineList:{
+            type: Array,
+            value: function(){
+              return [
+                {
+                  id: '1px',
+                  name:'Estandar'
+                },
+                {
+                  id: '2px',
+                  name:'Doble'
+                },
+                {
+                  id: '3px',
+                  name:'Triple'
+                },
+                {
+                  id: '4px',
+                  name:'Cuadruple'
+                }
+              ];
+            }
+          },
+          /**
+           * Lista del tamaño de icono que se punta en las casillas junto con padding para centrarlas
+           */ 
+          iconoList:{
+            type: Array,
+            value: function(){
+              return [
+                {
+                  size: '--emoji-icon-width:90px;--emoji-icon-height:90px',
+                  padding: '10px',
+                  name:'Extra Grande'
+                },
+                {
+                  size: '--emoji-icon-width:70px;--emoji-icon-height:70px',
+                  padding: '20px',
+                  name:'Grande'
+                },
+                {
+                  size: '--emoji-icon-width:50px;--emoji-icon-height:50px',
+                  padding: '30px',
+                  name:'Mediano'
+                },
+                {
+                  size: '--emoji-icon-width:30px;--emoji-icon-height:30px',
+                  padding: '40px',
+                  name:'Chico'
+                }
+              ];
+            }
+          },
+          /**
+           * Lista de posibles colores aplicables a las casillas
+           */ 
+          colorBorde:{
+            type: Array,
+            value: function(){
+              return [
+                {
+                  id: 'darkcyan',
+                  name: 'Azul claro'
+                },
+                {
+                  id: 'lightseagreen',
+                  name: 'Verde agua'
+                },
+                {
+                  id: 'lightcoral',
+                  name: 'Coral'
+                },
+                {
+                  id: 'lightsalmon',
+                  name: 'Salmon'
+                },
+                {
+                  id: 'lightslategray',
+                  name: 'Gris'
+                },
+                {
+                  id: 'white',
+                  name: 'Blanco'
+                },
+                {
+                  id: 'lightgreen',
+                  name: 'Verde'
+                },
+                {
+                  id: 'lightpink',
+                  name: 'Rosa'
+                },
+                {
+                  id: 'purple',
+                  name: 'Morado'
+                },
+                {
+                  id: 'red',
+                  name: 'Rojo'
+                },
+                {
+                  id: 'yellow',
+                  name: 'Amarillo'
+                }
+              ];
+            }
+          },
+          /**
+           * Lista de posibles colores de fondo de las casillas
+           */ 
+          colorFondo:{
+            type: Array,
+            value: function(){
+              return [
+                {
+                  id: 'black',
+                  name: 'Negro'
+                },
+                {
+                  id: 'darkcyan',
+                  name: 'Azul claro'
+                },
+                {
+                  id: 'lightseagreen',
+                  name: 'Verde agua'
+                },
+                {
+                  id: 'lightcoral',
+                  name: 'Coral'
+                },
+                {
+                  id: 'lightsalmon',
+                  name: 'Salmon'
+                },
+                {
+                  id: 'lightslategray',
+                  name: 'Gris'
+                },
+                {
+                  id: 'white',
+                  name: 'Blanco'
+                },
+                {
+                  id: 'lightgreen',
+                  name: 'Verde'
+                },
+                {
+                  id: 'lightpink',
+                  name: 'Rosa'
+                },
+                {
+                  id: 'purple',
+                  name: 'Morado'
+                },
+                {
+                  id: 'red',
+                  name: 'Rojo'
+                },
+                {
+                  id: 'yellow',
+                  name: 'Amarillo'
+                }
+              ];
+            }
+          },
+          /**
+           * Número de casillas seleccionadas
+           */ 
+          casillas:{
+            type: Number,
+            value: 10
+          },
+          /**
+           * Color de borde de casillas seleccionado
+           */ 
+          bordercolor:{
+            type: String,
+            value: 'darkcyan'
+          },
+          /**
+           * Color de fondo de casilla seleccionado
+           */ 
+          fondocolor:{
+            type: String,
+            value: 'black'
+          },
+          /**
+           * Sombra aplicada a la casilla
+           */ 
+          shadow:{
+            type: Boolean,
+            value: false
+          },
+          /**
+           * Radio de los bordes de la casilla
+           */ 
+          radius:{
+            type: String,
+            value: '10px'
+          },
+          /**
+           * Tamaño de icono seleccionado
+           */ 
+          iconosize:{
+            type: String,
+            value: '--emoji-icon-width:90px;--emoji-icon-height:90px'
+          },
+          /**
+           * Padding del tamaño el icono seleccionado
+           */ 
+          iconopadding:{
+            type: String,
+            value: '10px'
+          },
+          /**
+           * Estilo de línea del borde de la casilla seleccionada
+           */ 
+          styleline:{
+            type: String,
+            value: 'solid'
+          },
+          /**
+           * Grosor de linea del borde de la casilla seleccionada
+           */ 
+          grosorline:{
+            type: String,
+            value: '1px'
+          },
+          /**
+           * Velocidad de animación seleccionada
+           */ 
+          speed:{
+            type: String,
+            value: '500'
+          },
+          /**
+           * Espacios vacío con imágen
+           */ 
+          empty:{
+            type: String,
+            value: 'false'
+          },
+          /**
+           * Icono seleccionado para las casillas vacias
+           */ 
+          emptyicon:{
+            type: String,
+            value: 'o'
+          },
+          /**
+           * Nombre del icono seleccionado
+           */
+          name:{
+            type: String,
+            value: 'rana'
+          },
+          /**
+           * Posición anterior de la rana
+           */ 
+          ant:{
+            type: Number,
+            value: 0
+          },
+          /**
+           * Arreglo de opciones de iconos
+           */ 
+          opciones:{
+            type:Array,
+            value:function(){
+              return [
+                {
+                  id: 'frog',
+                  value: 'rana',
+                  check: true
+                },
+                {
+                  id: 'alien',
+                  value: 'alien',
+                  check: false
+                },
+                {
+                  id: 'bear',
+                  value: 'oso',
+                  check: false
+                },
+                {
+                  id: 'cat',
+                  value: 'gato',
+                  check: false
+                },
+                {
+                  id: 'crab',
+                  value: 'cangrejo',
+                  check: false
+                },
+                {
+                  id: 'dog',
+                  value: 'perro',
+                  check: false
+                },
+                {
+                  id: 'dragon',
+                  value: 'dragon',
+                  check: false
+                },
+                {
+                  id: 'fox',
+                  value: 'zorro',
+                  check: false
+                },
+                {
+                  id: 'ghost',
+                  value: 'fantasma',
+                  check: false
+                },
+                {
+                  id: 'hamster',
+                  value: 'hamster',
+                  check: false
+                },
+                {
+                  id: 'monkey_face',
+                  value: 'mono',
+                  check: false
+                },
+                {
+                  id: 'panda_face',
+                  value: 'panda',
+                  check: false
+                },
+                {
+                  id: 'oncoming_automobile',
+                  value: 'carro',
+                  check: false
+                },
+                {
+                  id: 'oncoming_bus',
+                  value: 'bus',
+                  check: false
+                },
+                {
+                  id: 'helicopter',
+                  value: 'helicoptero',
+                  check: false
+                },
+                {
+                  id: 'airplane',
+                  value: 'avión',
+                  check: false
+                },
+                {
+                  id: 'rocket',
+                  value: 'cohete',
+                  check: false
+                },
+                {
+                  id: 'robot',
+                  value: 'robot',
+                  check: false
+                },
+                {
+                  id: 'skull',
+                  value: 'craneo',
+                  check: false
+                },
+                {
+                  id: 'soccer',
+                  value: 'futbol',
+                  check: false
+                },
+                {
+                  id: 'tractor',
+                  value: 'tractor',
+                  check: false
+                },
+                {
+                  id: 'angel',
+                  value: 'ángel',
+                  check: false
+                },
+                {
+                  id: 'clown',
+                  value: 'payaso',
+                  check: false
+                },
+                {
+                  id: 'fire',
+                  value: 'fuego',
+                  check: false
+                },
+                {
+                  id: 'bat',
+                  value: 'murcielago',
+                  check: false
+                },
+                {
+                  id: '8ball',
+                  value: 'bola 8',
+                  check: false
+                },
+                {
+                  id: 'round_pushpin',
+                  value: 'pin',
+                  check: false
+                },
+                {
+                  id: 'alarm_clock',
+                  value: 'alarma',
+                  check: false
+                },
+                {
+                  id: 'angry',
+                  value: 'furioso',
+                  check: false
+                },
+                {
+                  id: 'baby_tone2',
+                  value: 'baby',
+                  check: false
+                },
+                {
+                  id: 'beers',
+                  value: 'cerveza',
+                  check: false
+                },
+                {
+                  id: 'blush',
+                  value: 'sonrojado',
+                  check: false
+                },
+                {
+                  id: 'boy_tone2',
+                  value: 'boy',
+                  check: false
+                },
+                {
+                  id: 'butterfly',
+                  value: 'mariposa',
+                  check: false
+                },
+                {
+                  id: 'cloud_tornado',
+                  value: 'tornado',
+                  check: false
+                },
+                {
+                  id: 'joystick',
+                  value: 'joystick',
+                  check: false
+                },
+                {
+                  id: 'earth_americas',
+                  value: 'mundo',
+                  check: false
+                },
+                {
+                  id: 'game_die',
+                  value: 'dado',
+                  check: false
+                },
+                {
+                  id: 'grin',
+                  value: 'sonriente',
+                  check: false
+                },
+                {
+                  id: 'heart_eyes',
+                  value: 'enamorado',
+                  check: false
+                },
+                {
+                  id: 'icecream',
+                  value: 'helado',
+                  check: false
+                },
+                {
+                  id: 'jack_o_lantern',
+                  value: 'hallowen',
+                  check: false
+                },
+                {
+                  id: 'apple',
+                  value: 'manzana',
+                  check: false
+                },
+                {
+                  id: 'balloon',
+                  value: 'globo',
+                  check: false
+                },
+                {
+                  id: 'battery',
+                  value: 'bateria',
+                  check: false
+                },
+                {
+                  id: 'bomb',
+                  value: 'bomba',
+                  check: false
+                },
+                {
+                  id: 'girl_tone2',
+                  value: 'girl',
+                  check: false
+                },
+                {
+                  id: 'star2',
+                  value: 'estrella',
+                  check: false
+                },
+                {
+                  id: 'trident',
+                  value: 'tridente',
+                  check: false
+                },
+                {
+                  id: 'unicorn',
+                  value: 'unicornio',
+                  check: false
+                },
+                {
+                  id: 'whale',
+                  value: 'ballena',
+                  check: false
+                },
+                {
+                  id: 'wolf',
+                  value: 'lobo',
+                  check: false
+                }
+              ];
+            }
+          }
+        };
+      }
+      /**
+       * Reset de movimientos a los movimientos por default
+       */
+      _resetMoves(){
+        this.$.selCas.selectedIndex = 0;
+        this.$.selColorB.selectedIndex = 0;
+        this.$.selColorF.selectedIndex = 0;
+        this.$.selSombra.selectedIndex = 0;
+        this.$.selRadius.selectedIndex = 0;
+        this.$.selIcono.selectedIndex = 0;
+        this.$.selStyleLine.selectedIndex = 0;
+        this.$.selGrLine.selectedIndex = 0;
+        this.$.selSpeed.selectedIndex = 0;
+        this.$.selEmpty.selectedIndex = 0;
+        this._setNumCasilla();
+        this._setColorBorde();
+        this._setBackgroundColor();
+        this._setShadow();
+        this._setRadius();
+        this._setIconoSize();
+        this._setStyleLine();
+        this._setGrLine();
+        this._setSpeed();
+        this._setEmpty();
+      }
+      /**
+       * Obtiene el número de casillas que fueron seleccionadas
+       */
+      _setNumCasilla(){
+        this.casillas = parseInt(this.$.selCas.options[this.$.selCas.selectedIndex].value);
+      }
+      /**
+       * Obtiene el color del borde de la casilla que fue seleccionado
+       */
+      _setColorBorde(){
+        this.bordercolor = this.$.selColorB.options[this.$.selColorB.selectedIndex].value;
+      }
+      /**
+       * Obtiene el color de fondo de la casilla que fue seleccionado
+       */
+      _setBackgroundColor(){
+        this.fondocolor = this.$.selColorF.options[this.$.selColorF.selectedIndex].value;
+      }
+      /**
+       * Obtiene si a la casilla se le va a aplicar una sombra
+       */
+      _setShadow(){
+        this.shadow = this.$.selSombra.options[this.$.selSombra.selectedIndex].value;
+      }
+      /**
+       * Obtiene el radio seleccionado que se le va aplicar al borde de la casilla
+       */
+      _setRadius(){
+        this.radius = this.$.selRadius.options[this.$.selRadius.selectedIndex].value;
+      }
+      /**
+       * Obtiene el tamaño del icono que fue seleccionado
+       */
+      _setIconoSize(){
+        this.iconosize = this.$.selIcono.options[this.$.selIcono.selectedIndex].value;
+        this.iconopadding = this.get(['iconoList.'+this.$.selIcono.selectedIndex]+'.padding');
+      }
+      /**
+       * Obtiene el estilo de la línea del borde que fue seleccionado
+       */
+      _setStyleLine(){
+        this.styleline = this.$.selStyleLine.options[this.$.selStyleLine.selectedIndex].value;
+      }
+      /**
+       * Obtiene el grosor de la línea del borde que fue seleccionado
+       */
+      _setGrLine(){
+        this.grosorline = this.$.selGrLine.options[this.$.selGrLine.selectedIndex].value;
+      }
+      /**
+       * Obtiene la velocidad de animación de salto seleccionada
+       */
+      _setSpeed(){
+        this.speed = this.$.selSpeed.options[this.$.selSpeed.selectedIndex].value;
+      }
+      /**
+       * Hace visible el combo de selección de imágen de vacio si el combo de
+       * rellena vacios esta con la opción Si si esta como No se oculta este combo
+       */ 
+      _setEmpty(){
+        this.empty = this.$.selEmpty.options[this.$.selEmpty.selectedIndex].value;
+        if(this.empty == 'true'){
+          this.$.divImgEmpty.style.visibility = "visible";
+        }else{
+          this.$.divImgEmpty.style.visibility = "hidden";
         }
-        window.customElements.define(FrogApp.is,FrogApp);
-    </script>
+        this.$.selEmptyIcon.selectedIndex = 0;
+        this._setEmptyIcon();
+      }
+      /**
+       * Obtiene el icono seleccionado para los espacios vacios de las casillas
+       */
+      _setEmptyIcon(){
+        this.emptyicon = this.$.selEmptyIcon.options[this.$.selEmptyIcon.selectedIndex].value;
+      }
+      /**
+       * Función para los crear los botones de selección de icono
+       */
+      _setButtons(){
+        var padre = this.$.divBtnOption;
+        //Limpiamos el contenido del div para evitar duplicidades
+        padre.innerHTML = "";
+        //Recorremos el arreglo de la propiedad opciones
+        for(let i=0;i<this.opciones.length;i++){
+          let div = document.createElement("div");
+          let btn = document.createElement("button");
+          btn.setAttribute('name','icono');
+          btn.setAttribute('value',this.get(['opciones.'+i+'.id']));
+          btn.setAttribute('class',this._setStyle(this.get(['opciones.'+i+'.check'])));
+          //Se agrega una función flecha para agregar la función que se ejecutará en el evento click
+          btn.addEventListener('click',()=>{
+            this.selection = this.get(['opciones.'+i+'.id']);
+            this.name = this.get(['opciones.'+i+'.value']);
+            this.set('opciones.'+this.ant+'.check',false);
+            this.set('opciones.'+i+'.check',true);
+            this.ant = i;
+          });
+          let emojiIcon = document.createElement("emoji-icon");
+          emojiIcon.setAttribute("emoji",this.get(['opciones.'+i+'.id']));
+          btn.appendChild(emojiIcon);
+          div.appendChild(btn);
+          padre.appendChild(div);
+        }
+      }
+      /**
+       * Devuelve que estilo se le asiganará a la casilla
+       * @param {Boolean} this.opciones.check Indica true si se punta marcada o false si se pinta desmarcada
+       * @return {String} Posibles valores "marcada"y "desmarcada"
+       */
+      _setStyle(marca){
+        if(marca){
+          return "marcada";
+        }else{
+          return "desmarcada";
+        }
+      }
+      /**
+       * Constructor
+       */ 
+      constructor(){
+        super();
+      }
+    }
+    window.customElements.define(FrogApp.is,FrogApp);
+  </script>
 </dom-module>

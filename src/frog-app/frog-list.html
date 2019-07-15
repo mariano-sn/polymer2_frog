@@ -9,33 +9,53 @@
         display: block;
         background-color: black;
       }
+      /**
+      * Estilo aplicado a todas a las etiquetas con id = "btnJump"
+      */
       #btnJump{
         display: inline-block;
         padding: 0em 1.5em;
-        width: 90%;
+        width: 1250px;
         height: auto;
       }
+      /**
+      * Estilo aplicado a todas a las etiquetas div dentro de un id = "btnJump"
+      */
       #btnJump > div{
         display: inline-block;
         width: 100px;
         margin: 0px 5px;
         align-content: center;
       }
+      /**
+      * Estilo aplicado a todas a las etiquetas emoji-icon dentro
+      * de una etiqueta p contenida dentro de un div y este dentro de un id = "btnJump"
+      */
       #btnJump > div p emoji-icon{
         --emoji-icon-width: 40px;
         --emoji-icon-height: 40px;
       }
+      /**
+      * Estilo aplicado a todas a las etiquetas con id = "wayFrog"
+      */
       #wayFrog{
         padding: 1.5em 1.5em;
         justify-content: center;
-        width: 90%;
+        width: 1320px;
         height: auto;
       }
+      /**
+      * Estilo aplicado a todas a las etiquetas div dentro de un id = "wayFrog"
+      */
       #wayFrog > div{
-        padding: 0px 5px;
+        padding: 5px 5px;
         display: inline-block;
         background-color: black;
       }
+      /**
+      * Estilo aplicado a todas a las etiquetas p dentro de un
+      * div contenido dentro de una etiqueta con id = "wayFrog"
+      */
       #wayFrog > div p{
         width: 110px;
         height: 110px;
@@ -43,23 +63,39 @@
         border-radius: 10px;
         margin: 0px 0px;
       }
+      /**
+      * Estilo aplicado a todas a las etiquetas emoji-icon dentro
+      * de una etiqueta p contenida dentro de un div y este dentro de un id = "wayFrog"
+      */
       #wayFrog > div p emoji-icon{
         --emoji-icon-width: 80px;
         --emoji-icon-height: 80px;
       }
+      /**
+      * Estilo aplicado a todas a las etiquetas button
+      */
       button{
         border-radius: 10px;
         width: 100px;
         height: 40px;
       }
+      /**
+      * Estilo aplicado a todas a las etiquetas button seleccionadas
+      */
       button:hover{
         background-color: lightseagreen;
       }
+      /**
+      * Estilo aplicado a todas a las etiquetas p dentro de un div
+      */
       div > p{
         color: white;
         text-align: center;
         margin: 5px 0px;
       }
+      /**
+      * Estilo aplicado a todas a las etiquetas con id = "pMvs"
+      */
       #pMvs{
         color: white;
         padding: 0em 1.5em;
@@ -67,6 +103,7 @@
         height: auto;
       }
     </style>
+    <!--Inicio de sección de control de movimientos-->
     <p id="pMvs">Movimientos</p>
     <div id="btnJump">
       <div>
@@ -134,7 +171,10 @@
         <p>Posición</p>
       </div>
     </div>
+    <!--Fin de sección de control de movimientos-->
+    <!--Inicio de sección de casillas-->
     <div id="wayFrog"></div>
+    <!--Fin de sección de casillas-->
   </template>
   <script>
     /**
@@ -142,21 +182,30 @@
      * @polymer
      */
     class FrogList extends Polymer.Element {
-      static get is() { return 'frog-list'; }
+      /**
+       * Get de función is
+       * @return {String} Nombre de dom-module id
+       */
+      static get is() { 
+        return 'frog-list'; 
+      }
+      /**
+       * Función de observers para detectar modificaciones en un Array
+       * se utiliza el comodín * para detectar los cambios
+       */
       static get observers() {
         return [
           '_setListFrog(arreglo.*)'
         ];
       }
       /**
-        * Array of strings describing multi-property observer methods and their
-        * dependant properties
-        */
+       * Objeto properties que incluye las propiedades a utilizar
+       */
       static get properties() {
         return {
           /**
-          *Arreglo de casillas
-          */
+           * Arreglo de casillas 
+           */
           arreglo:{
             type: Array,
             value: function (){
@@ -164,119 +213,165 @@
             }
           },
           /**
-           * Selección de imagen
+           * Selección de imágen lanzando función _setListFrog en cada
+           * modificación de la variable
            */
-           selection:{
-             type: String,
-             value: '',
-             observer: '_setListFrog'
-           },
+          selection:{
+            type: String,
+            value: '',
+            observer: '_setListFrog'
+          },
           /**
-           * Saltos
+           * Arreglo de saltos dados para pintar los emoji-icon
            */
-           jumps:{
-             type: Array,
-             value: function(){
-                 return ['zero','zero'];
-                }
-           },
-           /**
-           * Saltos
+          jumps:{
+            type: Array,
+            value: function(){
+              return ['zero','zero'];
+            }
+          },
+          /**
+           * Arreglo de la posición donde se encuentra la rana para pintar los emoji-icon
            */
-           posJump:{
-             type: Array,
-             value: function(){
-               return ['zero','zero'];
-              }
-           },
-           /**
-            * Posición de la rana
-            */
-           position:{
-             type: Number,
-             value: 0
-           },
-           /**
-            * Posición de la rana
-            */
-            casillas:{
-             type: Number,
-             observer: '_setReset'
-           },
-           /**
-            * Posición de la rana
-            */
-            bordercolor:{
-             type: String,
-             observer: '_setListFrog'
-           },
-           /**
-            * Posición de la rana
-            */
-            fondocolor:{
-             type: String,
-             observer: '_setListFrog'
-           },
-           /**
-            * Posición de la rana
-            */
-            radius:{
-             type: String,
-             observer: '_setListFrog'
-           },
-           /**
-            * Posición de la rana
-            */
-            shadow:{
-             type: String,
-             observer: '_setListFrog'
-           },
-           /**
-            * Posición de la rana
-            */
-            iconosize:{
-             type: String,
-             observer: '_setListFrog'
-           },
-           /**
-            * Posición de la rana
-            */
-            iconopadding:{
-             type: String,
-             observer: '_setListFrog'
-           },
-           /**
-            * Emoji de posición
-            */
-            emojiPosition:{
-              type: Array,
-              value: function(){
-               return ['zero','zero'];
-              }
-           }
+          posJump:{
+            type: Array,
+            value: function(){
+              return ['zero','zero'];
+            }
+          },
+          /**
+           * Posición actual de la rana
+           */
+          position:{
+            type: Number,
+            value: 0
+          },
+          /**
+           * Número de casillas seleccionada lanza función _setReset en caso
+           * de que se modifique el valor de la propiedad
+           */
+          casillas:{
+            type: Number,
+            observer: '_setReset'
+          },
+          /**
+           * Color del borde de las casillas lanza la función _setListFrog
+           * en caso de que se modifique el valor de la propiedad
+           */
+          bordercolor:{
+            type: String,
+            observer: '_setListFrog'
+          },
+          /**
+           * Color de fondo del borde de las casillas lanza la función _setListFrog
+           * en caso de que se modifique el valor de la propiedad
+           */
+          fondocolor:{
+            type: String,
+            observer: '_setListFrog'
+          },
+          /**
+           * Radio del borde de las casillas lanza la función _setListFrog
+           * en caso de que se modifique el valor de la propiedad
+           */
+          radius:{
+            type: String,
+            observer: '_setListFrog'
+          },
+          /**
+           * Sombra de las casillas lanza la función _setListFrog
+           * en caso de que se modifique el valor de la propiedad
+           */
+          shadow:{
+            type: String,
+            observer: '_setListFrog'
+          },
+          /**
+           * Tamaño de icono del contenido de las casillas lanza la función _setListFrog
+           * en caso de que se modifique el valor de la propiedad
+           */
+          iconosize:{
+            type: String,
+            observer: '_setListFrog'
+          },
+          /**
+           * Padding de las casillas lanza la función _setListFrog
+           * en caso de que se modifique el valor de la propiedad
+           */
+          iconopadding:{
+            type: String,
+            observer: '_setListFrog'
+          },
+          /**
+           * Etilo de línea del borde de las casillas lanza la función _setListFrog
+           * en caso de que se modifique el valor de la propiedad
+           */
+          styleline:{
+            type: String,
+            observer: '_setListFrog'
+          },
+          /**
+           * Grosor de línea del borde de las casillas lanza la función _setListFrog
+           * en caso de que se modifique el valor de la propiedad
+           */
+          grosorline:{
+            type: String,
+            observer: '_setListFrog'
+          },
+          /**
+           * Velocidad de animación de salto lanza la función _setListFrog
+           * en caso de que se modifique el valor de la propiedad
+           */
+          speed:{
+            type: String
+          },
+          /**
+           * Vacio de las casillas lanza la función _setListFrog
+           * en caso de que se modifique el valor de la propiedad
+           */
+          empty:{
+            type: String,
+            observer: '_setListFrog'
+          },
+          /**
+           * Icono en las casillas vacias lanza la función _setListFrog
+           * en caso de que se modifique el valor de la propiedad
+           */
+          emptyicon:{
+            type: String,
+            observer: '_setListFrog'
+          },
+          /**
+           * Arreglo del icono a pintar de la posición actual de la rana
+           */
+          emojiPosition:{
+            type: Array,
+            value: function(){
+              return ['zero','zero'];
+            }
+          }
         };
       }
       /**
-       * Función random
-       * 
-      */
-     _setReset(){
-       this.position = 0;
-       this._setNumJump(this.position);
-       this._setNumPos(this.position);
-       this._setNumCasillas();
-     }
+       * Función para realizar un reset de los movimientos
+       */
+      _setReset(){
+        this.position = 0;
+        this._setNumJump(this.position);
+        this._setNumPos(this.position);
+        this._setNumCasillas();
+      }
       /**
-       * Función random
-       * 
-      */
-     _getRandomNumber(){
-       var rand = Math.floor(Math.random()*(this.arreglo.length)+1);
-       return rand;
-     }
-     /**
-      * 
-      */
+       * Función para generar un random entero en un intervalo
+       * @return {Number} Número randon entero generado
+       */
+      _getRandomNumber(){
+        var rand = Math.floor(Math.random()*(this.arreglo.length)+1);
+        return rand;
+      }
+      /**
+       * Set de número de casillas seleccionadas
+       */
       _setNumCasillas(){
         var newArreglo = [];
         for(let i=0;i<this.casillas;i++){
@@ -287,21 +382,21 @@
           }
         }
         this.set('arreglo',newArreglo);
-      } 
-     /**
-      * Función de salto a la derecha
-      */
-     _setJumpRight(){
-       let numJump = this._getRandomNumber();
-       this._setNumJump(numJump);
-       let pos = this.position;
-       let ant;
-       for(let i=0;i<numJump;i++){
-         setTimeout(()=>{
-           pos += 1;
-           if(pos == this.arreglo.length){
-             pos = 0;
-             ant = this.arreglo.length - 1;
+      }
+      /**
+       * Salto a la derecha de forma aleatoria
+       */
+      _setJumpRight(){
+        let numJump = this._getRandomNumber();
+        this._setNumJump(numJump);
+        let pos = this.position;
+        let ant;
+        for(let i=0;i<numJump;i++){
+          setTimeout(()=>{
+            pos += 1;
+            if(pos == this.arreglo.length){
+              pos = 0;
+              ant = this.arreglo.length - 1;
             }else{
               ant = (pos-1);
             }
@@ -309,91 +404,91 @@
             this.set('arreglo.'+pos,true);
             this.position = pos;
             this._setNumPos(this.position);
-          },500*i);
+          },parseInt(this.speed)*i);
         }
-     }
-     /**
-      * Función de salto a la derecha
-      */
-     _setJumpNext(){
-          let pos = this.position;
-          let numJump = 1;
-          this._setNumJump(numJump);
-          let ant;
-          setTimeout(()=>{
-              pos += 1;
-              if(pos == this.arreglo.length){
-                  pos = 0;
-                  ant = this.arreglo.length - 1;
-                }else{
-                    ant = (pos-1);
-                }
-                this.set('arreglo.'+ant,false);
-                this.set('arreglo.'+pos,true);
-                this.position = pos;
-                this._setNumPos(this.position);
-            },100);
-        }
-     /**
-      * Función de salto a la derecha
-      */
+      }
+      /**
+       * Un salto a la derecha
+       */
+      _setJumpNext(){
+        let pos = this.position;
+        let numJump = 1;
+        this._setNumJump(numJump);
+        let ant;
+        setTimeout(()=>{
+          pos += 1;
+          if(pos == this.arreglo.length){
+            pos = 0;
+            ant = this.arreglo.length - 1;
+          }else{
+            ant = (pos-1);
+          }
+          this.set('arreglo.'+ant,false);
+          this.set('arreglo.'+pos,true);
+          this.position = pos;
+          this._setNumPos(this.position);
+        },100);
+      }
+      /**
+       * Saltos hasta el final de las casillas
+       */
       _setJumpLast(){
         let pos = this.position;
         let numJump = (this.arreglo.length - 1) - pos;
         this._setNumJump(numJump);
         let ant;
         for(let i=0;i<numJump;i++){
-            setTimeout(()=>{
+          setTimeout(()=>{
             pos += 1;
             if(pos == this.arreglo.length){
-                pos = 0;
-                ant = this.arreglo.length - 1;
-                }else{
-                ant = (pos-1);
-                }
-                this.set('arreglo.'+ant,false);
-                this.set('arreglo.'+pos,true);
-                this.position = pos;
-                this._setNumPos(this.position);
-            },500*i);
+              pos = 0;
+              ant = this.arreglo.length - 1;
+            }else{
+              ant = (pos-1);
+            }
+            this.set('arreglo.'+ant,false);
+            this.set('arreglo.'+pos,true);
+            this.position = pos;
+            this._setNumPos(this.position);
+          },parseInt(this.speed)*i);
         }
-     }
-     /**
-      * Función de salto a la derecha
-      */
+      }
+      /**
+       * Un salta a la izquierda
+       */
       _setJumpBack(){
         let pos = this.position;
         let numJump = 1;
         this._setNumJump(numJump);
         let ant;
         setTimeout(()=>{
-            pos -= 1;
-           if(pos == -1){
-             pos = this.arreglo.length - 1;
-             ant = 0;
-            }else{
-              ant = (pos+1);
-            }
-            this.set('arreglo.'+ant,false);
-            this.set('arreglo.'+pos,true);
-            this.position = pos;
-            this._setNumPos(this.position);
+          pos -= 1;
+          if(pos == -1){
+            pos = this.arreglo.length - 1;
+            ant = 0;
+          }else{
+            ant = (pos+1);
+          }
+          this.set('arreglo.'+ant,false);
+          this.set('arreglo.'+pos,true);
+          this.position = pos;
+          this._setNumPos(this.position);
         },100);
-     }
-     /**
-      * Función de salto a la izquierda
-      */
+      }
+      /**
+       * Saltos a las izquierda de forma aleatoria
+       */
       _setJumpLeft(){
-       let numJump = this._getRandomNumber();
-       this._setNumJump(numJump);
-       let pos = this.position;
-       let ant;
-       for(let i=0;i<numJump;i++){
-         setTimeout(()=>{
-           pos -= 1;
-           if(pos == -1){
-             pos = this.arreglo.length - 1;
-             ant = 0;
+        let numJump = this._getRandomNumber();
+        this._setNumJump(numJump);
+        let pos = this.position;
+        let ant;
+        for(let i=0;i<numJump;i++){
+          setTimeout(()=>{
+            pos -= 1;
+            if(pos == -1){
+              pos = this.arreglo.length - 1;
+              ant = 0;
             }else{
               ant = (pos+1);
             }
@@ -401,23 +496,23 @@
             this.set('arreglo.'+pos,true);
             this.position = pos;
             this._setNumPos(this.position);
-          },500*i);
+          },parseInt(this.speed)*i);
         }
-     }
-     /**
-      * Función de salto al inicio
-      */
+      }
+      /**
+       * Función de salto al inicio
+       */
       _setJumpFirst(){
-       let pos = this.position;
-       let numJump = pos;
-       this._setNumJump(numJump);
-       let ant;
-       for(let i=0;i<numJump;i++){
-         setTimeout(()=>{
-           pos -= 1;
-           if(pos == -1){
-             pos = this.arreglo.length - 1;
-             ant = 0;
+        let pos = this.position;
+        let numJump = pos;
+        this._setNumJump(numJump);
+        let ant;
+        for(let i=0;i<numJump;i++){
+          setTimeout(()=>{
+            pos -= 1;
+            if(pos == -1){
+              pos = this.arreglo.length - 1;
+              ant = 0;
             }else{
               ant = (pos+1);
             }
@@ -425,101 +520,112 @@
             this.set('arreglo.'+pos,true);
             this.position = pos;
             this._setNumPos(this.position);
-          },500*i);
+          },parseInt(this.speed)*i);
         }
-     }
-     /**
-      * 
-      */
-     _getNumEmoji(num){
-         if(parseInt(num) == 0){
-             return 'zero';
-         }else if(parseInt(num) == 1){
-             return 'one';
-         }else if(parseInt(num) == 2){
-             return 'two';
-         }else if(parseInt(num) == 3){
-             return 'three';
-         }else if(parseInt(num) == 4){
-             return 'four';
-         }else if(parseInt(num) == 5){
-             return 'five';
-         }else if(parseInt(num) == 6){
-             return 'six';
-         }else if(parseInt(num) == 7){
-             return 'seven';
-         }else if(parseInt(num) == 8){
-             return 'eight';
-         }else if(parseInt(num) == 9){
-             return 'nine';
-         }
-     } 
-     /**
-      * Obtiene el emoji que se debe de obtener del número de saltos
-      */
-     _setNumJump(num){
-         var numS = num.toString();
-         if(num >= 10){
-            this.set('jumps.0',this._getNumEmoji(numS.charAt(0)));
-            this.set('jumps.1',this._getNumEmoji(numS.charAt(1)));
-         }else{
-            this.set('jumps.0',this._getNumEmoji('0'));
-            this.set('jumps.1',this._getNumEmoji(numS.charAt(0)));
-         }
-     }
-     /**
-      * Obtiene el emoji que se debe de obtener del número de posición
-      */
+      }
+      /**
+       * Get del emoji-icon para pintar números de datos o posiciones
+       * @param {Number} num Número que se desea saber el emoji-icon asociado
+       * @return {String} valor del emoji-icon
+       */
+      _getNumEmoji(num){
+        if(parseInt(num) == 0){
+          return 'zero';
+        }else if(parseInt(num) == 1){
+          return 'one';
+        }else if(parseInt(num) == 2){
+          return 'two';
+        }else if(parseInt(num) == 3){
+          return 'three';
+        }else if(parseInt(num) == 4){
+          return 'four';
+        }else if(parseInt(num) == 5){
+          return 'five';
+        }else if(parseInt(num) == 6){
+          return 'six';
+        }else if(parseInt(num) == 7){
+          return 'seven';
+        }else if(parseInt(num) == 8){
+          return 'eight';
+        }else if(parseInt(num) == 9){
+          return 'nine';
+        }
+      }
+      /**
+       * Obtiene el emoji que se debe de obtener del número de saltos
+       * @param {Number} num Número que se quiere pintar de saltos
+       */
+      _setNumJump(num){
+        var numS = num.toString();
+        if(num >= 10){
+          this.set('jumps.0',this._getNumEmoji(numS.charAt(0)));
+          this.set('jumps.1',this._getNumEmoji(numS.charAt(1)));
+        }else{
+          this.set('jumps.0',this._getNumEmoji('0'));
+          this.set('jumps.1',this._getNumEmoji(numS.charAt(0)));
+        }
+      }
+      /**
+       * Obtiene el emoji que se debe de obtener del número de posición
+       * @param {Number} num Número que se quiere pintar de posición
+       */
       _setNumPos(num){
         var numP = num.toString();
         if(num >= 10){
-            this.set('emojiPosition.0',this._getNumEmoji(numP.charAt(0)));
-            this.set('emojiPosition.1',this._getNumEmoji(numP.charAt(1)));
+          this.set('emojiPosition.0',this._getNumEmoji(numP.charAt(0)));
+          this.set('emojiPosition.1',this._getNumEmoji(numP.charAt(1)));
          }else{
-            this.set('emojiPosition.0',this._getNumEmoji('0'));
-            this.set('emojiPosition.1',this._getNumEmoji(numP.charAt(0)));
-         }
-       }
+          this.set('emojiPosition.0',this._getNumEmoji('0'));
+          this.set('emojiPosition.1',this._getNumEmoji(numP.charAt(0)));
+        }
+      }
       /**
-       * Función para los divs
-      */
-     _setListFrog(){
-       var padre = this.$.wayFrog;
-       padre.innerHTML = "";
-       for(let i=0;i<this.arreglo.length;i++){
-         let child = document.createElement("div");
-         let p = document.createElement("p");
-         p.style.border = "1px solid "+this.bordercolor;
-         p.style.backgroundColor = this.fondocolor;
-         if(this.shadow == 'Si'){
-           p.style.boxShadow = "4px 4px 7px lightgrey";
-         }else if(this.shadow == 'No'){
-          p.style.boxShadow = "";
-         }
-         p.style.borderRadius = this.radius;
-         let frog = document.createElement("emoji-icon");
-         frog.setAttribute("emoji",this._setFrog(this.get(['arreglo',i])));
-         frog.setAttribute("style",this.iconosize);
-         frog.style.padding = this.iconopadding;
-         p.appendChild(frog);
-         child.appendChild(p);
-         padre.appendChild(child);
-       }
-     }
-     /**
-      *Función que nos devuelve la clase a aplicar en el div
-      *dependiendo de un boolean 
-      */
+       * Pintado de las casillas en div wayFrog
+       */
+      _setListFrog(){
+        var padre = this.$.wayFrog;
+        //Limpiamos el contenido del div para evitar duplicidades
+        padre.innerHTML = "";
+        for(let i=0;i<this.arreglo.length;i++){
+          let child = document.createElement("div");
+          let p = document.createElement("p");
+          p.style.border = this.grosorline;
+          p.style.borderStyle = this.styleline;
+          p.style.borderColor = this.bordercolor;
+          p.style.backgroundColor = this.fondocolor;
+          if(this.shadow == 'Si'){
+            p.style.boxShadow = "4px 4px 7px lightgrey";
+          }else if(this.shadow == 'No'){
+            p.style.boxShadow = "";
+          }
+          p.style.borderRadius = this.radius;
+          let frog = document.createElement("emoji-icon");
+          frog.setAttribute("emoji",this._setFrog(this.get(['arreglo',i])));
+          frog.setAttribute("style",this.iconosize);
+          frog.style.padding = this.iconopadding;
+          p.appendChild(frog);
+          child.appendChild(p);
+          padre.appendChild(child);
+        }
+      }
+      /**
+       * Función que nos devuelve la clase a aplicar en el div
+       * dependiendo de un boolean
+       */
       _setFrog(marca){
-       if(marca){
-         return this.selection;
-       }else{
-         return "";
-       }
-     }
+        if(marca){
+          return this.selection;
+        }else{
+          if(this.empty == 'false'){
+            return '';
+          }else{
+            return this.emptyicon;
+          }
+        }
+      }
       /**
-      *Constructor
-      */
+       * Constructor
+       */
       constructor(){
         super();
       }
