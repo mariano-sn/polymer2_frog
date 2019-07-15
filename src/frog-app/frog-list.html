@@ -157,18 +157,25 @@
       </div>
       <div>
         <p>
-            <template is="dom-repeat" items="[[jumps]]" as="jump" mutable-data>
-                <emoji-icon emoji="[[jump]]"></emoji-icon>
-            </template>
+          <template is="dom-repeat" items="[[jumps]]" as="jump" mutable-data>
+            <emoji-icon emoji="[[jump]]"></emoji-icon>
+          </template>
         </p>
         <p>Saltos</p>
       </div>
       <div>
         <p>
           <template is="dom-repeat" items="[[emojiPosition]]" as="emojiPos" mutable-data>
-              <emoji-icon emoji="[[emojiPos]]"></emoji-icon>
+            <emoji-icon emoji="[[emojiPos]]"></emoji-icon>
           </template>
         <p>Posición</p>
+      </div>
+      <div style="width: 200px;">
+        <p>
+          <template is="dom-repeat" items="[[listmoves]]" as="mov" mutable-data>
+            <emoji-icon emoji="[[mov]]"></emoji-icon>
+          </template>
+        <p>Movimientos</p>
       </div>
     </div>
     <!--Fin de sección de control de movimientos-->
@@ -233,16 +240,23 @@
           /**
            * Arreglo de la posición donde se encuentra la rana para pintar los emoji-icon
            */
-          posJump:{
+          listmoves:{
             type: Array,
             value: function(){
-              return ['zero','zero'];
+              return ['zero','zero','zero','zero'];
             }
           },
           /**
            * Posición actual de la rana
            */
           position:{
+            type: Number,
+            value: 0
+          },
+          /**
+           * Movimientos actuales de la rana
+           */
+          moves:{
             type: Number,
             value: 0
           },
@@ -357,8 +371,10 @@
        */
       _setReset(){
         this.position = 0;
+        this.moves = 0;
         this._setNumJump(this.position);
         this._setNumPos(this.position);
+        this._setNumMov(this.moves);
         this._setNumCasillas();
       }
       /**
@@ -403,6 +419,8 @@
             this.set('arreglo.'+ant,false);
             this.set('arreglo.'+pos,true);
             this.position = pos;
+            this.moves += 1;
+            this._setNumMov(this.moves);
             this._setNumPos(this.position);
           },parseInt(this.speed)*i);
         }
@@ -426,6 +444,8 @@
           this.set('arreglo.'+ant,false);
           this.set('arreglo.'+pos,true);
           this.position = pos;
+          this.moves += 1;
+          this._setNumMov(this.moves);
           this._setNumPos(this.position);
         },100);
       }
@@ -449,6 +469,8 @@
             this.set('arreglo.'+ant,false);
             this.set('arreglo.'+pos,true);
             this.position = pos;
+            this.moves += 1;
+            this._setNumMov(this.moves);
             this._setNumPos(this.position);
           },parseInt(this.speed)*i);
         }
@@ -472,6 +494,8 @@
           this.set('arreglo.'+ant,false);
           this.set('arreglo.'+pos,true);
           this.position = pos;
+          this.moves += 1;
+          this._setNumMov(this.moves);
           this._setNumPos(this.position);
         },100);
       }
@@ -495,6 +519,8 @@
             this.set('arreglo.'+ant,false);
             this.set('arreglo.'+pos,true);
             this.position = pos;
+            this.moves += 1;
+            this._setNumMov(this.moves);
             this._setNumPos(this.position);
           },parseInt(this.speed)*i);
         }
@@ -519,6 +545,8 @@
             this.set('arreglo.'+ant,false);
             this.set('arreglo.'+pos,true);
             this.position = pos;
+            this.moves += 1;
+            this._setNumMov(this.moves);
             this._setNumPos(this.position);
           },parseInt(this.speed)*i);
         }
@@ -577,6 +605,38 @@
          }else{
           this.set('emojiPosition.0',this._getNumEmoji('0'));
           this.set('emojiPosition.1',this._getNumEmoji(numP.charAt(0)));
+        }
+      }
+      /**
+       * Obtiene el emoji que se debe de obtener del número de movimientos
+       * @param {Number} num Número que se quiere pintar de movimientos
+       */
+       _setNumMov(num){
+        var numM = num.toString();
+        if(num == 9999){
+          this.moves = 0;
+          numM = '0';
+        }
+        if(num >= 1000){
+          this.set('listmoves.0',this._getNumEmoji(numM.charAt(0)));
+          this.set('listmoves.1',this._getNumEmoji(numM.charAt(1)));
+          this.set('listmoves.2',this._getNumEmoji(numM.charAt(2)));
+          this.set('listmoves.3',this._getNumEmoji(numM.charAt(3)));
+         }else if(num >= 100 && num < 1000){
+          this.set('listmoves.0',this._getNumEmoji('0'));
+          this.set('listmoves.1',this._getNumEmoji(numM.charAt(0)));
+          this.set('listmoves.2',this._getNumEmoji(numM.charAt(1)));
+          this.set('listmoves.3',this._getNumEmoji(numM.charAt(2)));
+        }else if(num >= 10 && num < 100){
+          this.set('listmoves.0',this._getNumEmoji('0'));
+          this.set('listmoves.1',this._getNumEmoji('0'));
+          this.set('listmoves.2',this._getNumEmoji(numM.charAt(0)));
+          this.set('listmoves.3',this._getNumEmoji(numM.charAt(1)));
+        }else{
+          this.set('listmoves.0',this._getNumEmoji('0'));
+          this.set('listmoves.1',this._getNumEmoji('0'));
+          this.set('listmoves.2',this._getNumEmoji('0'));
+          this.set('listmoves.3',this._getNumEmoji(numM.charAt(0)));
         }
       }
       /**
