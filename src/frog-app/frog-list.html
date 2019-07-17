@@ -1,10 +1,12 @@
-<!--Imports de librerías-->
+<!--Inicio de imports de librerías-->
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/noto-emoji-iconset/noto-emoji-iconset.html">
 <link rel="import" href="../../bower_components/noto-emoji-iconset/emoji-icon.html">
-
+<!--Fin de imports de librerías-->
+<!--Inicio de dom-module-->
 <dom-module id="frog-list">
   <template>
+    <!--Inicio de style-->
     <style>
       :host {
         display: block;
@@ -104,6 +106,7 @@
         height: auto;
       }
     </style>
+    <!--Fin de style-->
     <!--Inicio de sección de control de movimientos-->
     <p id="pMvs">Movimientos</p>
     <div id="btnJump">
@@ -693,4 +696,6 @@
     }
     window.customElements.define(FrogList.is, FrogList);
   </script>
+  <!--Fin de script-->
 </dom-module>
+<!--Fin de dom-module-->
